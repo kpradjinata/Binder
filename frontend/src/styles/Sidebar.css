@@ -1,35 +1,40 @@
 .sidebar {
-    width: 250px;
-    background-color: #1a1a1a;
-    color: white;
-    padding: 20px;
-    height: 100vh;
-    box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
-  
-  .menu-item {
-    padding: 12px;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-  }
-  
-  .menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .menu-item-icon {
-    margin-right: 12px;
-    font-size: 20px;
-  }
-  
-  .menu-item-text {
-    font-size: 16px;
-  }
+  position: fixed;
+  top: 2vh; /* This will center the sidebar vertically */
+  left: 5px; /* Adjust this value to set the distance from the left edge */
+  width: 250px;
+  height: 96vh; /* 95% of the viewport height */
+  background-color: #1a1a1a;
+  color: white;
+  padding: 20px;
+  border-radius: 20px; /* Rounded corners */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto; /* In case content overflows */
+  box-sizing: border-box; /* Ensures padding is included in the width/height */
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  border-radius: 10px; /* Rounded corners for menu items */
+  margin-bottom: 5px;
+}
+
+.menu-item:hover, .menu-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item-icon {
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+.menu-item-text {
+  font-size: 16px;
+}
