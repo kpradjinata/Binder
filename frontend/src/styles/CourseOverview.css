@@ -19,7 +19,56 @@
   transform: translateX(100%);
 }
 
-/* ... (keep your existing styles for course-card, etc.) */
+
+.course-card {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.course-image {
+  height: 120px;
+  background-size: cover;
+  background-position: center;
+}
+
+.course-content {
+  padding: 20px;
+}
+
+.course-title {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.instructor-name {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.progress-bar {
+  height: 5px;
+  background-color: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
 
 .navigation-buttons {
   display: flex;
