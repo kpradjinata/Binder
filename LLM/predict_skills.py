@@ -3,14 +3,16 @@ from pyBKT.models import Model
 
 #APPROACH MAKE EACH SKILL ITS OWN PYBKT, EACH BINARY IS AN ANSWER, AND PREDICT AVERAGE MASTERY PROBABLITY
 # Load your existing CSV file
-data_path = 'test.csv'
+data_path = 'skill1.csv'
 data = pd.read_csv(data_path)
 print(f"Data loaded from '{data_path}'")
 
+'''
 print("\nFirst few rows of the data:")
 print(data.head())
 print("\nColumn names:")
 print(data.columns)
+'''
 
 # Initialize and fit the model
 model = Model()
@@ -35,8 +37,10 @@ student_mastery, skill_mastery = analyze_mastery(predictions)
 print("\nAverage mastery probability by student:")
 print(student_mastery)
 
+'''
 print("\nProportion of students who mastered each skill:")
 print(skill_mastery)
+'''
 
 # Function to get skills a specific student needs to work on
 def skills_to_improve(student_id, predictions, mastery_threshold=0.8):
