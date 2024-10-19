@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
           <GroupSession />
           <TrendingDiscussion />
           <div className="inbox">
-            <h2>Inbox</h2>
+            <h2 className="inbox-title">Inbox</h2>
             {/* Add inbox component here */}
           </div>
         </div>

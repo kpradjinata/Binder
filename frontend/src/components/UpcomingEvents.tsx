@@ -1,4 +1,3 @@
-// UpcomingEvents.tsx
 import React from 'react';
 import '../styles/UpcomingEvents.css';
 
