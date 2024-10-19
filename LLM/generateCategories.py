@@ -25,11 +25,32 @@ def analyze_pdf(pdf_path, prompt):
         messages=messages,
         max_tokens=500
     )
+    return response.choices[0].message.content
+
+def generate_quiz(results):
+    # Extract text from PDF
+    prompt = "Create three questions per category for a total of 9 questions"
+    
+    # Prepare messages for the API call
+    messages = [
+        {"role": "system", "content": f"{prompt}"},
+        {"role": "user", "content": f"{results}"} 
+    ]
+    
+    # Call the OpenAI API
+    response = client.chat.completions.create(
+        model="gpt-4-1106-preview",  # Using the latest model as of October 2024
+        messages=messages,
+        max_tokens=500
+    )
     
     return response.choices[0].message.content
+ 
 # Example usage
 pdf_path = "/Users/brentono/Binder/LLM/ExampleSyllabus.pdf"
-analysis_prompt = "Use this syllabus to generate 3 distinct hard skills someone would need to succeed in this course. Ex For software development: [Frontend, Backend, Databases]. Return the result as an array."
+analysis_prompt = "Use this syllabus to generate 3 distinct hard skills someone would need to succeed in this course. Ex For software development: Frontend, Backend, Databases. "
 
 result = analyze_pdf(pdf_path, analysis_prompt)
 print(result)
+
+print(generate_quiz(result))
