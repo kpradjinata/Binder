@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import QuizQuestion from '../components/QuizQuestion';
+import '../styles/Quiz.css';
 
 interface QuizData {
   questions: string[];
@@ -33,33 +34,6 @@ const quizData: QuizData = {
     ["9π", "12π", "18π", "36π"]
   ],
   answers: ["8", "4", "x = 2", "3.14", "54", "2x", "1", "3", "180 degrees", "9π"]
-};
-
-const quizStyle: React.CSSProperties = {
-  maxWidth: '800px',
-  margin: '0 auto',
-  padding: '20px',
-  backgroundColor: '#121212',
-  color: '#e0e0e0',
-};
-
-const submitButtonStyle: React.CSSProperties = {
-  backgroundColor: '#e0e0e0',
-  color: '#000',
-  padding: '12px 24px',
-  border: 'none',
-  borderRadius: '4px',
-  cursor: 'pointer',
-  fontSize: '16px',
-  marginTop: '20px',
-};
-
-const quizResultsStyle: React.CSSProperties = {
-  backgroundColor: '#1e1e1e',
-  border: '2px solid #bb86fc',
-  borderRadius: '8px',
-  padding: '20px',
-  marginTop: '30px',
 };
 
 const Quiz: React.FC = () => {
@@ -98,8 +72,8 @@ const Quiz: React.FC = () => {
   };
 
   return (
-    <div style={quizStyle}>
-      <h2 style={{ color: '#e0e0e0' }}>Canvas-Style Quiz</h2>
+    <div className="quiz-container">
+      <h2>Quiz (Number)</h2>
       {quizData.questions.map((question, index) => (
         <QuizQuestion
           key={index}
@@ -113,11 +87,11 @@ const Quiz: React.FC = () => {
         />
       ))}
       {!quizSubmitted && (
-        <button style={submitButtonStyle} onClick={handleSubmitQuiz}>Submit Quiz</button>
+        <button className="submit-button" onClick={handleSubmitQuiz}>Submit Quiz</button>
       )}
       {quizSubmitted && (
-        <div style={quizResultsStyle}>
-          <h3 style={{ color: '#e0e0e0' }}>Quiz Completed!</h3>
+        <div className="quiz-results">
+          <h3>Quiz Completed!</h3>
           <p>Your score: {calculateScore()}</p>
         </div>
       )}
