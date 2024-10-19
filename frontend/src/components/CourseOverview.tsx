@@ -41,7 +41,7 @@ const CourseOverview: React.FC = () => {
     { name: 'Economics', instructor: 'Hoaly Flack', progress: 100, image: '/path/to/economics-image.jpg' }
   ];
 
-  return (
+return (
     <div className="course-overview-container">
       <h2 className="overview-title">Daily Overview</h2>
       <div className="course-grid">
@@ -50,8 +50,8 @@ const CourseOverview: React.FC = () => {
         ))}
       </div>
       <div className="navigation-buttons">
-        <button className="nav-button">&lt;</button>
-        <button className="nav-button">&gt;</button>
+        <button className="nav-button" aria-label="Previous page">&lt;</button>
+        <button className="nav-button" aria-label="Next page">&gt;</button>
       </div>
     </div>
   );
