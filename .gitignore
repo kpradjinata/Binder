@@ -33,3 +33,39 @@ coverage
 .cache
 .parcel-cache
 
+# my-app
+
+# dependencies
+my-app/node_modules
+my-app/.pnp
+my-app/pnp.js
+my-app/.yarn/install-state.gz
+
+# testing
+my-app/coverage
+
+# next.js
+my-app/.next/
+my-app/out/
+
+# production
+my-app/build
+
+# misc
+my-app/.DS_Store
+my-app/*.pem
+
+# debug
+my-app/npm-debug.log*
+my-app/yarn-debug.log*
+my-app/yarn-error.log*
+
+# local env files
+my-app/.env*.local
+
+# vercel
+my-app/.vercel
+
+# typescript
+my-app/*.tsbuildinfo
+my-app/next-env.d.ts
