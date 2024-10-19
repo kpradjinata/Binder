@@ -1,8 +1,9 @@
 import pandas as pd
 from pyBKT.models import Model
 
+#APPROACH MAKE EACH SKILL ITS OWN PYBKT, EACH BINARY IS AN ANSWER, AND PREDICT AVERAGE MASTERY PROBABLITY
 # Load your existing CSV file
-data_path = 'student_data.csv'
+data_path = 'test.csv'
 data = pd.read_csv(data_path)
 print(f"Data loaded from '{data_path}'")
 
