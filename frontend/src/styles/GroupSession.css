@@ -1,0 +1,44 @@
+/* GroupSession.css */
+.group-session-card {
+    background-color: #e0f2e9;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .session-title {
+    margin-top: 0;
+    font-size: 16px;
+  }
+  
+  .session-info {
+    font-size: 14px;
+  }
+  
+  /* TrendingDiscussion.css */
+  .trending-discussion-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .discussion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .discussion-content {
+    flex-grow: 1;
+    font-size: 14px;
+  }
+  
+  .discussion-votes {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 12px;
+  }

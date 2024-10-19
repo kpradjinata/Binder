@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/CourseOverview.css';
 
 interface Course {
   name: string;
@@ -9,36 +10,21 @@ interface Course {
 
 const CourseCard: React.FC<Course> = ({ name, instructor, progress, image }) => {
   return (
-    <div style={{
-      width: '48%',
-      backgroundColor: 'white',
-      borderRadius: '10px',
-      overflow: 'hidden',
-      marginBottom: '15px',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-    }}>
-      <div style={{
-        height: '100px',
-        backgroundImage: `url(${image})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}></div>
-      <div style={{ padding: '15px' }}>
-        <h3 style={{ margin: '0 0 5px 0' }}>{name}</h3>
-        <p style={{ margin: '0 0 10px 0', color: '#666' }}>{instructor}</p>
-        <div style={{
-          height: '5px',
-          backgroundColor: '#eee',
-          borderRadius: '5px',
-        }}>
-          <div style={{
-            width: `${progress}%`,
-            height: '100%',
-            backgroundColor: progress === 100 ? '#4CAF50' : '#FFA500',
-            borderRadius: '5px',
-          }}></div>
+    <div className="course-card">
+      <div className="course-image" style={{ backgroundImage: `url(${image})` }}></div>
+      <div className="course-content">
+        <h3 className="course-title">{name}</h3>
+        <p className="instructor-name">{instructor}</p>
+        <div className="progress-bar">
+          <div 
+            className="progress" 
+            style={{ 
+              width: `${progress}%`,
+              backgroundColor: progress === 100 ? '#4CAF50' : '#FFA500'
+            }}
+          ></div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '5px' }}>
+        <div className="progress-info">
           <span>{progress}% Progress</span>
           <span>{progress}/100</span>
         </div>
@@ -56,21 +42,16 @@ const CourseOverview: React.FC = () => {
   ];
 
   return (
-    <div>
-      <h2 style={{ fontSize: '24px', marginBottom: '20px' }}>Daily Overview</h2>
-      <div style={{ 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        justifyContent: 'space-between', 
-        marginBottom: '20px' 
-      }}>
+    <div className="course-overview-container">
+      <h2 className="overview-title">Daily Overview</h2>
+      <div className="course-grid">
         {courses.map((course, index) => (
           <CourseCard key={index} {...course} />
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>&lt;</button>
-        <button style={{ backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>&gt;</button>
+      <div className="navigation-buttons">
+        <button className="nav-button">&lt;</button>
+        <button className="nav-button">&gt;</button>
       </div>
     </div>
   );

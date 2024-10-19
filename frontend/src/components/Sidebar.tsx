@@ -1,28 +1,25 @@
-// import React from "react";
+import React from 'react';
+import '../styles/Sidebar.css';
 
-const Sidebar = () => {
-    const menuItems = ['Dashboard', 'Study Plan', 'Groups', 'Analytics', 'Content Library', 'Profile'];
-    
-    return (
-      <div style={{
-        width: '250px',
-        backgroundColor: 'black',
-        color: 'white',
-        padding: '20px',
-      }}>
-        {menuItems.map((item, index) => (
-          <div key={index} style={{
-            padding: '10px',
-            marginBottom: '10px',
-            display: 'flex',
-            alignItems: 'center',
-          }}>
-            <span style={{ marginRight: '10px' }}>🔵</span> {/* Placeholder for icons */}
-            {item}
-          </div>
-        ))}
-      </div>
-    );
-  };
+const Sidebar: React.FC = () => {
+  const menuItems = ['Dashboard', 'Study Plan', 'Groups', 'Analytics', 'Content Library', 'Profile'];
+  
+  return (
+    <div className="sidebar-container">
+      <nav className="sidebar-nav">
+        <ul className="nav-list">
+          {menuItems.map((item, index) => (
+            <li key={index} className="nav-item">
+              <a href="#" className="nav-link">
+                <span className="icon">🔵</span> {/* Placeholder for icons */}
+                {item}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  );
+};
 
-  export default Sidebar;
+export default Sidebar;
