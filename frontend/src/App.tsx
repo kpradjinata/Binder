@@ -13,6 +13,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/quiz" element={<Quiz />} />
 
+        
       </Routes>
     </Router>
   );
