@@ -1,0 +1,52 @@
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .course-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .course-image {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .course-content {
+    padding: 15px;
+  }
+  
+  .course-title {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+  }
+  
+  .instructor-name {
+    margin: 0 0 10px 0;
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .progress-bar {
+    height: 5px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  
+  .progress {
+    height: 100%;
+  }
+  
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+  }

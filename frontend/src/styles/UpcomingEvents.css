@@ -1,0 +1,36 @@
+/* UpcomingEvents.css */
+.upcoming-events {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .event-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .event-date {
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 12px;
+  }
+  
+  .event-title {
+    flex-grow: 1;
+    font-size: 14px;
+  }
+  
+  .add-to-calendar {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+  }

@@ -1,25 +1,23 @@
-const TrendingDiscussion = () => {
-    const discussions = [
-      "anyone remember what Mr. Falck said would be on the math final?",
-      "Anybody need help on diff eq?",
-      "does anybody know how to do #5 on the econ homework?"
-    ];
-  
-    return (
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '10px',
-        padding: '15px',
-      }}>
-        <h3 style={{ marginTop: 0 }}>Trending Discussion</h3>
-        <ul style={{ paddingLeft: '20px', margin: 0 }}>
-          {discussions.map((discussion, index) => (
-            <li key={index} style={{ marginBottom: '10px' }}>{discussion}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
+import React from 'react';
+import '../styles/TrendingDiscussion.css';
 
+const TrendingDiscussion: React.FC = () => {
+  const discussions = [
+    "anyone remember what Mr. Falck said would be on the math final?",
+    "Anybody need help on diff eq?",
+    "does anybody know how to do #5 on the econ homework?"
+  ];
 
-export default TrendingDiscussion
+  return (
+    <div className="trending-discussion-container">
+      <h3 className="discussion-title">Trending Discussion</h3>
+      <ul className="discussion-list">
+        {discussions.map((discussion, index) => (
+          <li key={index} className="discussion-item">{discussion}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default TrendingDiscussion;

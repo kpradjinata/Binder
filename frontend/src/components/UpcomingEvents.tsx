@@ -1,48 +1,26 @@
-const UpcomingEvents = () => {
-    const events = [
-      { date: 'OCT 19', text: 'Wallahi' },
-      { date: 'OCT 24', text: 'Wallahi' },
-      { date: 'SEPT 11', text: 'Wallahi' }
-    ];
-  
-    return (
-      <div>
-        <h2 style={{ fontSize: '20px', marginBottom: '15px' }}>Upcoming Events</h2>
-        {events.map((event, index) => (
-          <div key={index} style={{
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            borderRadius: '10px',
-            padding: '15px',
-            marginBottom: '10px',
-          }}>
-            <div style={{
-              backgroundColor: ['#e3f2fd', '#fce4ec', '#e8f5e9'][index],
-              borderRadius: '5px',
-              padding: '5px 10px',
-              marginRight: '15px',
-              fontSize: '14px',
-              fontWeight: 'bold',
-            }}>
-              {event.date}
-            </div>
-            <div style={{ flex: 1 }}>{event.text}</div>
-            <button style={{
-              backgroundColor: 'black',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              padding: '5px 10px',
-              cursor: 'pointer',
-            }}>
-              Add to Calendar
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  };
-  
+// UpcomingEvents.tsx
+import React from 'react';
+import '../styles/UpcomingEvents.css';
 
-export default UpcomingEvents
+const UpcomingEvents: React.FC = () => {
+  const events = [
+    { date: 'OCT 19', title: 'Wallahi', color: 'lightblue' },
+    { date: 'OCT 24', title: 'Wallahi', color: 'lightpink' },
+    { date: 'SEPT 11', title: 'Wallahi', color: 'lightgreen' },
+  ];
+
+  return (
+    <div className="upcoming-events">
+      <h2>Upcoming Events</h2>
+      {events.map((event, index) => (
+        <div key={index} className="event-item">
+          <div className="event-date" style={{ backgroundColor: event.color }}>{event.date}</div>
+          <div className="event-title">{event.title}</div>
+          <button className="add-to-calendar">Add to Calendar</button>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default UpcomingEvents;
