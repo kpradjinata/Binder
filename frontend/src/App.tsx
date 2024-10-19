@@ -3,15 +3,18 @@ import Dashboard from './pages/Dashboard';
 
 import Quiz from './pages/Quiz';
 
+import Discussion from './pages/Discussion';
+
 import './App.css';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<div>Home</div>} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/discussion" element={<Discussion />} />
 
       </Routes>
     </Router>
