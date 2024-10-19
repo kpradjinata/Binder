@@ -1,6 +1,8 @@
 import pandas as pd
 from pyBKT.models import Model
 
+#python -u "/Users/brentono/Binder/LLM/predict_skills.py"
+
 def process_skill_csv(file_path):
     data = pd.read_csv(file_path)
     print(f"\nData loaded from '{file_path}'")
@@ -80,7 +82,42 @@ print(skill1)
 print(skill2)
 print(skill3)
 
+import numpy as np
+from itertools import combinations
 
+# Combine the skill scores into a single dictionary
+people = {
+    name: [skill1[name], skill2[name], skill3[name]]
+    for name in skill1.keys()
+}
+
+def complementary_score(group):
+    skills = np.array([people[name] for name in group])
+    return np.std(skills, axis=0).sum()
+
+# Generate all possible groups of 4
+all_groups = list(combinations(people.keys(), 4))
+
+# Sort groups by their complementary score (higher is better)
+sorted_groups = sorted(all_groups, key=complementary_score, reverse=True)
+
+# Select the top 4 non-overlapping groups
+final_groups = []
+used_people = set()
+
+for group in sorted_groups:
+    if not any(person in used_people for person in group):
+        final_groups.append(group)
+        used_people.update(group)
+        if len(final_groups) == 4:
+            break
+
+# Print the final groups
+for i, group in enumerate(final_groups, 1):
+    print(f"Group {i}:")
+    for person in group:
+        print(f"  {person}: {people[person]}")
+    print()
 
 # The following sections can be implemented as needed:
 '''
