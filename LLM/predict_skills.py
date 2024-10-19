@@ -1,65 +1,91 @@
 import pandas as pd
 from pyBKT.models import Model
 
-#APPROACH MAKE EACH SKILL ITS OWN PYBKT, EACH BINARY IS AN ANSWER, AND PREDICT AVERAGE MASTERY PROBABLITY
-# Load your existing CSV file
-data_path = 'skill1.csv'
-data = pd.read_csv(data_path)
-print(f"Data loaded from '{data_path}'")
+def process_skill_csv(file_path):
+    data = pd.read_csv(file_path)
+    print(f"\nData loaded from '{file_path}'")
 
-'''
-print("\nFirst few rows of the data:")
-print(data.head())
-print("\nColumn names:")
-print(data.columns)
-'''
+    model = Model()
+    model.fit(data=data)
+    print(f"Model fitted to data from {file_path}")
 
-# Initialize and fit the model
-model = Model()
-model.fit(data=data)
-print("Model fitted to data successfully")
+    predictions = model.predict(data=data)
+    print(f"Predictions made for {file_path}")
 
-# Make predictions
-predictions = model.predict(data=data)
-print("Predictions made successfully")
+    return predictions
 
-# Function to analyze mastery
 def analyze_mastery(predictions, mastery_threshold=0.8):
     latest_predictions = predictions.groupby(['user_id', 'skill_name']).last().reset_index()
     latest_predictions['mastered'] = latest_predictions['correct'] >= mastery_threshold
-    student_mastery = latest_predictions.groupby('user_id')['mastered'].mean()
+    student_mastery = latest_predictions.groupby('user_id')['correct'].mean()
     skill_mastery = latest_predictions.groupby('skill_name')['mastered'].mean()
     return student_mastery, skill_mastery
 
-# Analyze mastery
-student_mastery, skill_mastery = analyze_mastery(predictions)
-
-print("\nAverage mastery probability by student:")
-print(student_mastery)
-
-'''
-print("\nProportion of students who mastered each skill:")
-print(skill_mastery)
-'''
-
-# Function to get skills a specific student needs to work on
-def skills_to_improve(student_id, predictions, mastery_threshold=0.8):
+def skills_to_improve(student_id, predictions, mastery_threshold=0.6):
     student_preds = predictions[predictions['user_id'] == student_id]
     latest_preds = student_preds.groupby('skill_name').last()
     return latest_preds[latest_preds['correct'] < mastery_threshold].index.tolist()
 
-# Example: Get skills to improve for a specific student
-student_id = data['user_id'].iloc[0]  # Use the first student ID in the data
-skills_needed = skills_to_improve(student_id, predictions)
-print(f"\nSkills student {student_id} needs to improve:")
-print(skills_needed)
+# Process each skill CSV
+skill_files = ['skill1.csv', 'skill2.csv', 'skill3.csv']
+skill1 = {'Brenton' : 0, 'David': 0, 'Kevin' : 0, 'Ryan': 0} 
+skill2 = {'Brenton' : 0, 'David': 0, 'Kevin' : 0, 'Ryan': 0} 
+skill3 = {'Brenton' : 0, 'David': 0, 'Kevin' : 0, 'Ryan': 0} 
 
-# Optional: Perform cross-validation
+skills = {1: skill1, 2: skill2, 3: skill3}
+
+for i, file in enumerate(skill_files, 1):
+    predictions = process_skill_csv(file)
+    
+    # Analyze mastery for this skill
+    student_mastery, skill_mastery = analyze_mastery(predictions)
+
+    print(f"\nResults for Skill {i}:")
+    print("\nAverage mastery probability by student:")
+    print(student_mastery)
+
+    students = predictions['user_id'].unique()
+    for student in students:
+      skills[i][student] = student_mastery[student]
+    '''
+    print(f"\nProportion of students who mastered Skill {i}:")
+    print(skill_mastery)
+    '''
+    # Get skills to improve for each student
+    '''
+    students = predictions['user_id'].unique()
+    for student in students:
+        if student_mastery[student] < 0.6:
+            print(f"\nStudent {student} needs to improve in Skill {i}")
+        else:
+            print(f"\nStudent {student} has mastered Skill {i}")
+
+    # Optional: Perform cross-validation for this skill
+    '''
+    '''
+    try:
+        cv_results = model.crossvalidate(data=predictions, folds=5)
+        print(f"\nCross-validation results for Skill {i}:")
+        print(cv_results)
+    except Exception as e:
+        print(f"Error performing cross-validation for Skill {i}: {e}")
+    '''
+
+#match highest and lowest, second highest lowest, etc. 
+#add 1 count for this pair
+
+#do for all three skills
+#return pairings that produce the highest counts
+print(skill1)
+print(skill2)
+print(skill3)
+
+
+
+# The following sections can be implemented as needed:
 '''
-try:
-    cv_results = model.crossvalidate(data=data, folds=5)
-    print("\nCross-validation results:")
-    print(cv_results)
-except Exception as e:
-    print(f"Error performing cross-validation: {e}")
+# fetch user id through api
+# format skills as list
+# push list to convex database
+# perform vector search for similar users
 '''
