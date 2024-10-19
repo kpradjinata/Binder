@@ -1,5 +1,6 @@
-// import React from "react";
-import { DashboardIcon, ReaderIcon, Share1Icon, BarChartIcon, ArchiveIcon, AvatarIcon } from "@radix-ui/react-icons"
+import React from "react";
+import { DashboardIcon, ReaderIcon, Share1Icon, BarChartIcon, ArchiveIcon, AvatarIcon } from "@radix-ui/react-icons";
+import '../styles/Sidebar.css'; 
 
 const Sidebar: React.FC = () => {
   const menuItems = [
@@ -11,38 +12,16 @@ const Sidebar: React.FC = () => {
     { name: 'Profile', icon: <AvatarIcon /> }
   ];
 
-  const sidebarStyle: React.CSSProperties = {
-    width: '250px',
-    backgroundColor: '#1a1a1a',
-    color: 'white',
-    padding: '20px',
-    height: '100vh',
-    boxSizing: 'border-box',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 1000
-  };
-
   return (
-    <div style={sidebarStyle}>
+    <div className="sidebar">
       {menuItems.map((item, index) => (
-        <div key={index} style={{
-          padding: '12px',
-          marginBottom: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          cursor: 'pointer',
-          borderRadius: '8px',
-          transition: 'background-color 0.3s',
-        }}>
-          <span style={{ marginRight: '12px', fontSize: '20px' }}>{item.icon}</span>
-          <span style={{ fontSize: '16px' }}>{item.name}</span>
+        <div key={index} className="menu-item">
+          <span className="menu-item-icon">{item.icon}</span>
+          <span className="menu-item-text">{item.name}</span>
         </div>
       ))}
     </div>
   );
 };
-
 
 export default Sidebar;
