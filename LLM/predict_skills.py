@@ -1,7 +1,7 @@
 import pandas as pd
+import numpy as np
 from pyBKT.models import Model
-
-#python -u "/Users/brentono/Binder/LLM/predict_skills.py"
+from itertools import combinations
 
 def process_skill_csv(file_path):
     data = pd.read_csv(file_path)
@@ -30,9 +30,9 @@ def skills_to_improve(student_id, predictions, mastery_threshold=0.6):
 
 # Process each skill CSV
 skill_files = ['skill1.csv', 'skill2.csv', 'skill3.csv']
-skill1 = {'Brenton' : 0, 'David': 0, 'Kevin' : 0, 'Ryan': 0} 
-skill2 = {'Brenton' : 0, 'David': 0, 'Kevin' : 0, 'Ryan': 0} 
-skill3 = {'Brenton' : 0, 'David': 0, 'Kevin' : 0, 'Ryan': 0} 
+skill1 = {'Brenton': 0, 'David': 0, 'Kevin': 0, 'Ryan': 0}
+skill2 = {'Brenton': 0, 'David': 0, 'Kevin': 0, 'Ryan': 0}
+skill3 = {'Brenton': 0, 'David': 0, 'Kevin': 0, 'Ryan': 0}
 
 skills = {1: skill1, 2: skill2, 3: skill3}
 
@@ -48,42 +48,11 @@ for i, file in enumerate(skill_files, 1):
 
     students = predictions['user_id'].unique()
     for student in students:
-      skills[i][student] = student_mastery[student]
-    '''
-    print(f"\nProportion of students who mastered Skill {i}:")
-    print(skill_mastery)
-    '''
-    # Get skills to improve for each student
-    '''
-    students = predictions['user_id'].unique()
-    for student in students:
-        if student_mastery[student] < 0.6:
-            print(f"\nStudent {student} needs to improve in Skill {i}")
-        else:
-            print(f"\nStudent {student} has mastered Skill {i}")
+        skills[i][student] = student_mastery[student]
 
-    # Optional: Perform cross-validation for this skill
-    '''
-    '''
-    try:
-        cv_results = model.crossvalidate(data=predictions, folds=5)
-        print(f"\nCross-validation results for Skill {i}:")
-        print(cv_results)
-    except Exception as e:
-        print(f"Error performing cross-validation for Skill {i}: {e}")
-    '''
-
-#match highest and lowest, second highest lowest, etc. 
-#add 1 count for this pair
-
-#do for all three skills
-#return pairings that produce the highest counts
 print(skill1)
 print(skill2)
 print(skill3)
-
-import numpy as np
-from itertools import combinations
 
 # Combine the skill scores into a single dictionary
 people = {
@@ -101,16 +70,30 @@ all_groups = list(combinations(people.keys(), 4))
 # Sort groups by their complementary score (higher is better)
 sorted_groups = sorted(all_groups, key=complementary_score, reverse=True)
 
-# Select the top 4 non-overlapping groups
+# Select the top non-overlapping groups
 final_groups = []
 used_people = set()
 
 for group in sorted_groups:
     if not any(person in used_people for person in group):
-        final_groups.append(group)
+        final_groups.append(list(group))  # Convert to list so we can modify it later
         used_people.update(group)
-        if len(final_groups) == 4:
+        if len(used_people) >= len(people) - 3:  # Stop when all but 3 people are assigned
             break
+
+# Distribute remaining people
+remaining_people = list(set(people.keys()) - used_people)
+
+# If there's only one person left, add them to the group with the best complementary score
+if len(remaining_people) == 1:
+    best_group = max(final_groups, key=lambda g: complementary_score(g + remaining_people))
+    best_group.extend(remaining_people)
+else:
+    # If there are 2 or 3 people left, distribute them to create groups of 5
+    for person in remaining_people:
+        # Find the group with the best complementary score after adding this person
+        best_group = max(final_groups, key=lambda g: complementary_score(g + [person]))
+        best_group.append(person)
 
 # Print the final groups
 for i, group in enumerate(final_groups, 1):
