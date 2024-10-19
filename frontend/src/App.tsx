@@ -5,6 +5,8 @@ import Course from "./pages/Course";
 
 import Quiz from './pages/Quiz';
 
+import Discussion from './pages/Discussion';
+
 import './App.css';
 
 function App() {
@@ -12,6 +14,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+
+        <Route path="/discussion" element={<Discussion />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/course" element={<Course />} />
