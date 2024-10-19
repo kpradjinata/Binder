@@ -1,17 +1,17 @@
 import React from 'react';
-
 interface Event {
-    title: string;
-    date: string;
-    description?: string;
-    // Add any other properties your event object might have
-  }
-  
-  interface EventDetailsPopupProps {
-    event: Event;
-    onClose: () => void;
-  }
-  
+  date: string;
+  title: string;
+  color: string;
+  description?: string;
+  year?: number;
+}
+
+interface EventDetailsPopupProps {
+  event: Event;
+  onClose: () => void;
+}
+
 const EventDetailsPopup: React.FC<EventDetailsPopupProps> = ({ event, onClose }) => {
     
     return (
