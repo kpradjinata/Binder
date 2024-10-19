@@ -51,9 +51,11 @@ print(f"\nSkills student {student_id} needs to improve:")
 print(skills_needed)
 
 # Optional: Perform cross-validation
+'''
 try:
     cv_results = model.crossvalidate(data=data, folds=5)
     print("\nCross-validation results:")
     print(cv_results)
 except Exception as e:
     print(f"Error performing cross-validation: {e}")
+'''
