@@ -1,9 +1,14 @@
 import os
 import json
+from flask import Flask, request, jsonify
+from werkzeug.utils import secure_filename
 from openai import OpenAI
 from PyPDF2 import PdfReader
 
-# Set up OpenAI client
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
+
 client = OpenAI(api_key=os.getenv('API_KEY'))
 
 def extract_text_from_pdf(pdf_path):
@@ -97,22 +102,40 @@ def format_quiz(quiz_data):
 
     return questions, options, answers
 
-# Main execution
-pdf_path = "/Users/brentono/Binder/LLM/prob6.pdf"
-analysis_prompt = """
-Analyze this syllabus and identify exactly 3 distinct hard skills someone would need to succeed in this course.
-Return your response as a JSON object with the following structure:
-{
-    "skills": ["Skill 1", "Skill 2", "Skill 3"]
-}
-"""
+@app.route('/analyze_pdf', methods=['POST'])
+def analyze_pdf_route():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if file and file.filename.lower().endswith('.pdf'):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
 
-result = analyze_pdf(pdf_path, analysis_prompt)
-print("Identified skills:", result['skills'])
+        analysis_prompt = """
+        Analyze this syllabus and identify exactly 3 distinct hard skills someone would need to succeed in this course.
+        Return your response as a JSON object with the following structure:
+        {
+            "skills": ["Skill 1", "Skill 2", "Skill 3"]
+        }
+        """
 
-quiz_data = generate_quiz(result['skills'])
-questions, options, answers = format_quiz(quiz_data)
+        result = analyze_pdf(file_path, analysis_prompt)
+        quiz_data = generate_quiz(result['skills'])
+        questions, options, answers = format_quiz(quiz_data)
 
-print("Questions:", questions)
-print("Options:", options)
-print("Answers:", answers)
+        os.remove(file_path)  # Remove the uploaded file after processing
+
+        return jsonify({
+            'questions': questions,
+            'options': options,
+            'answers': answers
+        })
+    else:
+        return jsonify({'error': 'Invalid file type'}), 400
+
+if __name__ == '__main__':
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    app.run(debug=True)
