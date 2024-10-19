@@ -1,15 +1,19 @@
 import React from 'react';
 import Sidebar from "../components/Sidebar"
-// import DailyOverview from './DailyOverview';
-// import GroupSession from './GroupSession';
-// import TrendingDiscussion from './TrendingDiscussion';
-// import UpcomingEvents from './UpcomingEvents';
-// import Inbox from './Inbox';
+import CourseOverview from "../components/CourseOverview"
+import GroupSession from "../components/GroupSession"
+import TrendingDiscussion from "../components/TrendingDiscussion"
+import UpcomingEvents from "../components/UpcomingEvents"
+
 
 const Dashboard: React.FC = () => {
   return (
     <div>
       <Sidebar />
+      <CourseOverview />
+      <GroupSession />
+      <TrendingDiscussion />
+      <UpcomingEvents />
     </div>
   );
 };
