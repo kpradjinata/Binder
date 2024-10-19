@@ -5,15 +5,26 @@ import GroupSession from "../components/GroupSession"
 import TrendingDiscussion from "../components/TrendingDiscussion"
 import UpcomingEvents from "../components/UpcomingEvents"
 
+import '../styles/Dashboard.css';
 
 const Dashboard: React.FC = () => {
   return (
-    <div>
+    <div className="dashboard">
       <Sidebar />
-      <CourseOverview />
-      <GroupSession />
-      <TrendingDiscussion />
-      <UpcomingEvents />
+      <main className="main-content">
+        <div className="left-column">
+          <CourseOverview />
+          <UpcomingEvents />
+        </div>
+        <div className="right-column">
+          <GroupSession />
+          <TrendingDiscussion />
+          <div className="inbox">
+            <h2>Inbox</h2>
+            {/* Add inbox component here */}
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
