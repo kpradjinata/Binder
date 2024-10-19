@@ -1,10 +1,10 @@
 import React from 'react';
-import Sidebar from "../components/Sidebar"
-import CourseOverview from "../components/CourseOverview"
-import GroupSession from "../components/GroupSession"
-import TrendingDiscussion from "../components/TrendingDiscussion"
-import UpcomingEvents from "../components/UpcomingEvents"
-
+import Sidebar from "../components/Sidebar";
+import CourseOverview from "../components/CourseOverview";
+import GroupSession from "../components/GroupSession";
+import TrendingDiscussion from "../components/TrendingDiscussion";
+import UpcomingEvents from "../components/UpcomingEvents";
+import InboxPopup from "../components/InboxPopup";
 import '../styles/Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
           <TrendingDiscussion />
           <div className="inbox">
             <h2 className="inbox-title">Inbox</h2>
-            {/* Add inbox component here */}
+            <InboxPopup />
           </div>
         </div>
       </main>
