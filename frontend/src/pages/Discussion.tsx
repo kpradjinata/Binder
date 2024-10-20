@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/Discussion.css';
-import { HeartFilledIcon, PlusIcon } from "@radix-ui/react-icons"
+import { HeartFilledIcon, PlusIcon } from "@radix-ui/react-icons";
+import Sidebar from '../components/Sidebar'
 
 interface Thread {
   id: number;
@@ -27,7 +28,7 @@ const Discussion: React.FC = () => {
       title: "Score total for midterms",
       author: "Anonymous Finch",
       timestamp: "6 days ago",
-      content: "I noticed that only some past midterms put how many points the midterm is out of, and I was wondering if that could be put on ours? It's just helpful to know when strategizing what problems to work on more during the actual test, like if if I'm getting stuck on a problem that's worth 20/150 points I might want to spend a little more time on it, versus if I'm stuck on a problem that's worth 20/300 points, it might be better to move on and come back to it later.",
+      content: "I noticed that only some past midterms put how many points the midterm is out of...",
       likes: 1
     },
     {
@@ -37,6 +38,38 @@ const Discussion: React.FC = () => {
       timestamp: "4 days ago",
       content: "is a 2 vertices, 1 edge graph considered a tree? or for trees, do we only consider n>2?",
       likes: 1
+    },
+    {
+      id: 415,
+      title: "Graph Cycles",
+      author: "CuriousFox",
+      timestamp: "3 days ago",
+      content: "Can a cycle in a graph have overlapping vertices, or does each vertex need to be unique?",
+      likes: 2
+    },
+    {
+      id: 416,
+      title: "DFS vs BFS",
+      author: "LogicLion",
+      timestamp: "2 days ago",
+      content: "Which search algorithm is faster in terms of time complexity for dense graphs: DFS or BFS?",
+      likes: 5
+    },
+    {
+      id: 417,
+      title: "Binary Trees",
+      author: "SilentBear",
+      timestamp: "6 days ago",
+      content: "Why are binary search trees considered more efficient for searching compared to regular binary trees?",
+      likes: 3
+    },
+    {
+      id: 418,
+      title: "Minimum Spanning Tree",
+      author: "FastFalcon",
+      timestamp: "1 day ago",
+      content: "What is the difference between Prim's and Kruskal's algorithms when generating MSTs?",
+      likes: 4
     },
   ]);
 
@@ -54,7 +87,7 @@ const Discussion: React.FC = () => {
       {
         id: 2,
         author: "Anonymous Squirrel",
-        content: "yes i think so bc its still connected and acyclic, and edges are v-1. i believe even a single vertex would be considered a tree",
+        content: "yes i think so bc its still connected and acyclic...",
         timestamp: "4 days ago",
         likes: 1
       }
@@ -68,18 +101,6 @@ const Discussion: React.FC = () => {
 
   const currentThread = threads[currentThreadIndex];
   const currentComments = comments[currentThread.id] || [];
-
-  const goToPrevious = () => {
-    setCurrentThreadIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : threads.length - 1
-    );
-  };
-
-  const goToNext = () => {
-    setCurrentThreadIndex((prevIndex) =>
-      prevIndex < threads.length - 1 ? prevIndex + 1 : 0
-    );
-  };
 
   const likeThread = () => {
     setThreads(prevThreads => prevThreads.map(thread =>
@@ -132,69 +153,80 @@ const Discussion: React.FC = () => {
   };
 
   return (
-    <div className="discussion-forum">
-      <button onClick={() => setShowNewThreadForm(!showNewThreadForm)} className="new-thread-button">
-        <PlusIcon /> New Thread
-      </button>
+    <div className="discussion-container">
+      <Sidebar />
+      <div className="thread-navigation">
+        <button onClick={() => setShowNewThreadForm(true)} className="new-thread-button">
+          <PlusIcon /> New Thread
+        </button>
+        <ul className="thread-list">
+          {threads.map((thread, index) => (
+            <li key={thread.id} onClick={() => setCurrentThreadIndex(index)} className={index === currentThreadIndex ? 'active' : ''}>
+              {thread.title}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="discussion-content">
+        <div className="thread-content">
+          <h1>{currentThread.title} <span className="thread-id">#{currentThread.id}</span></h1>
+          <div className="thread-info">
+            <strong className="author">{currentThread.author}</strong>
+            <span className="timestamp">{currentThread.timestamp}</span>
+          </div>
+          <p className="thread-body">{currentThread.content}</p>
+          <div className="thread-actions">
+            <button onClick={likeThread} className="like-button"><HeartFilledIcon /></button>
+            <span>{currentThread.likes}   Likes</span>
+          </div>
+          <h2>{currentComments.length} Answer{currentComments.length !== 1 ? 's' : ''}</h2>
+          {currentComments.map(comment => (
+            <div key={comment.id} className="comment">
+              <div className="comment-header">
+                <span className="author">{comment.author}</span>
+                <span className="timestamp">{comment.timestamp}</span>
+              </div>
+              <p className="comment-body">{comment.content}</p>
+              <div className="comment-actions">
+                <button onClick={() => likeComment(comment.id)} className="like-button"><HeartFilledIcon /></button>
+                <span>{comment.likes} Likes</span>
+              </div>
+            </div>
+          ))}
+          <div className="new-comment-form">
+            <input
+              type="text"
+              placeholder="Add comment"
+              value={newCommentContent}
+              onChange={(e) => setNewCommentContent(e.target.value)}
+              className="add-comment"
+            />
+            <button onClick={createNewComment} className="post-comment-button">Post</button>
+          </div>
+        </div>
+      </div>
 
       {showNewThreadForm && (
-        <div className="new-thread-form">
-          <input
-            type="text"
-            placeholder="Thread Title"
-            value={newThreadTitle}
-            onChange={(e) => setNewThreadTitle(e.target.value)}
-          />
-          <textarea
-            placeholder="Thread Content"
-            value={newThreadContent}
-            onChange={(e) => setNewThreadContent(e.target.value)}
-          />
-          <button onClick={createNewThread}>Create Thread</button>
+        <div className="modal-overlay" onClick={() => setShowNewThreadForm(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Create New Thread</h2>
+            <input
+              type="text"
+              placeholder="Thread Title"
+              value={newThreadTitle}
+              onChange={(e) => setNewThreadTitle(e.target.value)}
+            />
+            <textarea
+              placeholder="Thread Content"
+              value={newThreadContent}
+              onChange={(e) => setNewThreadContent(e.target.value)}
+            />
+            <button onClick={createNewThread}>Create Thread</button>
+            <button onClick={() => setShowNewThreadForm(false)}>Cancel</button>
+          </div>
         </div>
       )}
-
-      <div className="thread-content">
-        <h1>{currentThread.title} <span className="thread-id">#{currentThread.id}</span></h1>
-        <div className="thread-info">
-          <span className="author">{currentThread.author}</span>
-          <span className="timestamp">{currentThread.timestamp}</span>
-        </div>
-        <p className="thread-body">{currentThread.content}</p>
-        <div className="thread-actions">
-          <button onClick={likeThread} className="like-button"><HeartFilledIcon /></button>
-          <span>{currentThread.likes} Likes</span>
-        </div>
-        <h2>{currentComments.length} Answer{currentComments.length !== 1 ? 's' : ''}</h2>
-        {currentComments.map(comment => (
-          <div key={comment.id} className="comment">
-            <div className="comment-header">
-              <span className="author">{comment.author}</span>
-              <span className="timestamp">{comment.timestamp}</span>
-            </div>
-            <p className="comment-body">{comment.content}</p>
-            <div className="comment-actions">
-              <button onClick={() => likeComment(comment.id)} className="like-button"><HeartFilledIcon /></button>
-              <span>{comment.likes} Likes</span>
-            </div>
-          </div>
-        ))}
-        <div className="new-comment-form">
-          <input
-            type="text"
-            placeholder="Add comment"
-            value={newCommentContent}
-            onChange={(e) => setNewCommentContent(e.target.value)}
-            className="add-comment"
-          />
-          <button onClick={createNewComment} className="post-comment-button">Post</button>
-        </div>
-      </div>
-      <div className="navigation">
-        <button onClick={goToPrevious} className="nav-button">← Previous</button>
-        <button className="dashboard-button">Go back to Dashboard</button>
-        <button onClick={goToNext} className="nav-button">Next →</button>
-      </div>
     </div>
   );
 };

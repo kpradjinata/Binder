@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
+import GroupDetailsOverlay from '../components/GroupDetailsOverlay';
 import '../styles/Groups.css';
+
 
 interface User {
   name: string;
@@ -34,28 +36,57 @@ const createGoogleCalendarUrl = (event: {
 };
 
 const Groups: React.FC = () => {
-  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<any | null>(null);
   const [invitedUsers, setInvitedUsers] = useState<User[]>([]);
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
 
-  const recommendedGroups = [
-    "Advanced Calculus Study Group",
-    "World History Discussion",
-    "Economics Project Team"
-  ];
+  const [recommendedGroups, setRecommendedGroups] = useState([
+    { id: 1, name: "Advanced Calculus Study Group", joined: false },
+    { id: 2, name: "World History Discussion", joined: false },
+    { id: 3, name: "Economics Project Team", joined: false }
+  ]);
 
   const myGroups = [
-    { name: "Math 101", members: 5, lastActive: "2 hours ago" },
-    { name: "History Buffs", members: 8, lastActive: "1 day ago" },
-    { name: "Econ Team", members: 4, lastActive: "3 days ago" },
+    { 
+      name: "Math 101", 
+      members: 5, 
+      lastActive: "2 hours ago",
+      description: "A study group for Math 101 students",
+      discussions: ["Upcoming midterm prep", "Homework help for Chapter 5"],
+      courseDescription: "Introduction to Calculus and Linear Algebra"
+    },
+    { 
+      name: "History Buffs", 
+      members: 8, 
+      lastActive: "1 day ago",
+      description: "Discussing historical events and their impact",
+      discussions: ["Ancient Rome documentary review", "Planning for museum visit"],
+      courseDescription: "World History from Ancient Times to Present"
+    },
+    { 
+      name: "Econ Team", 
+      members: 4, 
+      lastActive: "3 days ago",
+      description: "Collaborative group for Economics projects",
+      discussions: ["Market analysis project", "Macroeconomics study session"],
+      courseDescription: "Principles of Microeconomics and Macroeconomics"
+    },
   ];
 
-  const toggleGroupSelection = (group: string) => {
-    setSelectedGroups(prevSelected => 
-      prevSelected.includes(group)
-        ? prevSelected.filter(g => g !== group)
-        : [...prevSelected, group]
+  const handleOpenGroup = (group: any) => {
+    setSelectedGroup(group);
+  };
+
+  const handleCloseOverlay = () => {
+    setSelectedGroup(null);
+  };
+
+  const toggleGroupSelection = (groupId: number) => {
+    setRecommendedGroups(prevGroups =>
+      prevGroups.map(group =>
+        group.id === groupId ? { ...group, joined: !group.joined } : group
+      )
     );
   };
 
@@ -98,23 +129,27 @@ const Groups: React.FC = () => {
             <input type="text" placeholder="Search groups..." />
             <button className="filter-btn">Filter</button>
           </div>
+          <div className="group-actions">
+            <button className="join-group-btn">Join New Group</button>
+            <button className="create-group-btn">Create New Group</button>
+          </div>
           <div className="recommendations">
             <h3>Recommended Groups</h3>
             <ul>
-              {recommendedGroups.map((group, index) => (
-                <li 
-                  key={index} 
-                  onClick={() => toggleGroupSelection(group)}
-                  className={selectedGroups.includes(group) ? 'selected' : ''}
-                >
-                  {group}
+              {recommendedGroups.map((group) => (
+                <li key={group.id} className={group.joined ? 'joined' : ''}>
+                  <span>{group.name}</span>
+                  <button 
+                    onClick={() => toggleGroupSelection(group.id)}
+                    className={`join-btn ${group.joined ? 'joined' : ''}`}
+                  >
+                    {group.joined ? 'Joined' : 'Join'}
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
-          <button className="create-group-btn">Create New Group</button>
         </section>
-
         <section className="my-groups-section">
           <h2>My Groups</h2>
           <ul className="group-list">
@@ -124,7 +159,7 @@ const Groups: React.FC = () => {
                   <h3>{group.name}</h3>
                   <p>{group.members} members • Last active {group.lastActive}</p>
                 </div>
-                <button className="join-btn">Open</button>
+                <button className="open-btn" onClick={() => handleOpenGroup(group)}>Open</button>
               </li>
             ))}
           </ul>
@@ -180,6 +215,10 @@ const Groups: React.FC = () => {
           </div>
         </section>
       </div>
+
+      {selectedGroup && (
+        <GroupDetailsOverlay group={selectedGroup} onClose={handleCloseOverlay} />
+      )}
     </div>
   );
 };
