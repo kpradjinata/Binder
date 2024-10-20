@@ -3,16 +3,16 @@ import { ConvexError, v } from "convex/values";
 
 export const createHomework = mutation({
     args: {
-        id: v.string(),
-        courseId: v.string(),
+        subject: v.string(),
+        courseNumber: v.string(),
         name: v.string(),
         questions: v.array(v.string()),
         hints: v.array(v.string()),
     },
     handler: async (ctx, args) => {
         return await ctx.db.insert("homeworks", {
-            id: args.id,
-            courseId: args.courseId,
+            subject: args.subject,
+            courseNumber: args.courseNumber,
             name: args.name,
             questions: args.questions,
             hints: args.hints,
@@ -22,10 +22,11 @@ export const createHomework = mutation({
 
 export const getHomework = query({
     args: {
-        courseId: v.string(),
+        subject: v.string(),
+        courseNumber: v.string(),
         name: v.string(),
     },
     handler: async (ctx, args) => {
-        return await ctx.db.query("homeworks").withIndex("by_course_name", (q) => q.eq("courseId", args.courseId).eq("name", args.name)).collect();
+        return await ctx.db.query("homeworks").withIndex("by_subject_number_name", (q) => q.eq("subject", args.subject).eq("courseNumber", args.courseNumber).eq("name", args.name)).collect();
     }
 })

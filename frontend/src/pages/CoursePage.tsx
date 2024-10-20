@@ -3,9 +3,10 @@ import Sidebar from "../components/Sidebar";
 import '../styles/CoursePage.css';
 import { useParams } from 'react-router-dom';
 import PDFToText from 'react-pdftotext';
+import { useMutation, useQuery } from 'convex/react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { useEffect } from 'react';
 
 interface CourseData {
   name: string;
@@ -133,6 +134,41 @@ useEffect(() => {
     setCourseData(data);
   };
 
+  const createHomework = useMutation(api.homeworks.createHomework);
+  const createQuiz = useMutation(api.quizzes.createQuiz);
+  const getAllStudentQuizResFirst = useQuery(api.student_quiz_res.getAllStudentQuizResFirst);
+  const getAllStudentQuizResSecond = useQuery(api.student_quiz_res.getAllStudentQuizResSecond);
+  const getAllStudentQuizResThird = useQuery(api.student_quiz_res.getAllStudentQuizResThird);
+
+
+  // Create a post request to group students based on quiz results
+  console.log(getAllStudentQuizResFirst);
+
+  useEffect(() => {
+    if (getAllStudentQuizResFirst && getAllStudentQuizResSecond && getAllStudentQuizResThird) {
+      fetch("http://localhost:5001/group_students", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([
+          getAllStudentQuizResFirst,
+          getAllStudentQuizResSecond,
+          getAllStudentQuizResThird
+        ]),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Grouped students:", data);
+        })
+        .catch((error) => {
+          console.error("Error grouping students:", error);
+        });
+    }
+  }, [getAllStudentQuizResFirst, getAllStudentQuizResSecond, getAllStudentQuizResThird]);
+
+
+  console.log(getAllStudentQuizResFirst);
   fetchCourseData();
 }, [courseName]);
 
@@ -158,17 +194,16 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
             const hints: string[] = data["hints"];
             const options: string[][] = data["options"];
             createHomework({
-              id: "hwid",
-              courseId: "test id",
+              subject: "EECS",
+              courseNumber: "16",
               name: "Homework 1",
               questions: questions,
               hints: hints,
             })
             createQuiz({
-              id: "quizid",
-              courseId: "test id",
+              subject: "EECS",
+              courseNumber: "16",
               name: "Quiz 1",
-              description: "Quiz 1",
               questions: questions,
               answerOptions: options,
               answers: answers,
@@ -201,10 +236,39 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuizButtonVisible(true);
   };
 
+
+
   return (
     <div className="course-page">
       <Sidebar />
       <main className="course-main-content">
+        <h1 className="page-title">{courseName}</h1>
+
+        {/* <section className="add-course card"> */}
+
+
+        {/* <section className="add-course card">
+
+          <h2>Add Course</h2>
+          <input
+            type="text"
+            placeholder="Subject"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Course Number"
+            value={courseNumber}
+            onChange={(e) => setCourseNumber(e.target.value)}
+          />
+          <button onClick={handleAddCourse}>Add Course</button>
+
+        </section>
+
+
+        </section> */}
+
         <h1 className="page-title">{courseData.name}</h1>
 
         <section className="course-info card">
