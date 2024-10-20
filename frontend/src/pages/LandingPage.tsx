@@ -27,7 +27,7 @@ const LandingPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Welcome to Your Learning Platform
+          Welcome to Binder
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}

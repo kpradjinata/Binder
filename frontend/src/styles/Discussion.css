@@ -346,3 +346,31 @@ h2 {
 .new-comment-form button:hover {
   background-color: #1c54cc;
 }
+
+.thread-list li a {
+  text-decoration: none;
+  /* Remove underlines */
+  color: inherit;
+  /* Inherit color from parent */
+  transition: transform 0.2s ease;
+  /* Add transition for transform only */
+}
+
+.thread-list li a:hover {
+  transform: translateX(5px);
+  /* Slide right on hover */
+}
+
+.new-thread-button {
+  background-color: #7f33ff;
+  /* Keep original background color */
+  color: #ffffff;
+  /* Keep original text color */
+  transition: transform 0.2s ease;
+  /* Add transition for transform */
+}
+
+.new-thread-button:hover {
+  transform: scale(1.05);
+  /* Slightly scale up on hover */
+}
