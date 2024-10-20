@@ -3,7 +3,7 @@ import Dashboard from './pages/Dashboard';
 import Groups from "./pages/Groups";
 import CoursePage from "./pages/CoursePage";
 import ContentLibrary from "./pages/ContentLibrary";
-
+import Analytics from "./pages/Analytics"
 import Profile from "./pages/Profile"
 import LandingPage from "./pages/LandingPage";
 
@@ -24,9 +24,9 @@ function App() {
         <Route path="/groups" element={<Groups />} />
         <Route path="/course/:courseName" element={<CoursePage />} />
         <Route path="/content-library" element={<ContentLibrary />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
-
       </Routes>
     </Router>
   );
