@@ -22,14 +22,14 @@ def analyze_pdf(pdf_path, prompt):
     pdf_text = extract_text_from_pdf(pdf_path)
     
     messages = [
-        {"role": "system", "content": "You are a helpful assistant that analyzes PDF content."},
+        {"role": "system", "content": "You are a helpful assistant that analyzes PDF content and generates hints for homework questions."},
         {"role": "user", "content": f"{prompt}\n\nPDF Content:\n{pdf_text}"}
     ]
     
     response = client.chat.completions.create(
         model="gpt-4-1106-preview",
         messages=messages,
-        max_tokens=500,
+        max_tokens=1000,
         temperature=0.2,
         response_format={"type": "json_object"}
     )
@@ -114,24 +114,38 @@ def analyze_pdf_route():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
 
-        analysis_prompt = """
+        # Analyze for skills
+        skills_prompt = """
         Analyze this syllabus and identify exactly 3 distinct hard skills someone would need to succeed in this course.
         Return your response as a JSON object with the following structure:
         {
             "skills": ["Skill 1", "Skill 2", "Skill 3"]
         }
         """
+        skills_result = analyze_pdf(file_path, skills_prompt)
 
-        result = analyze_pdf(file_path, analysis_prompt)
-        quiz_data = generate_quiz(result['skills'])
+        # Generate quiz
+        quiz_data = generate_quiz(skills_result['skills'])
         questions, options, answers = format_quiz(quiz_data)
+
+        # Generate hints
+        hints_prompt = """
+        Analyze this homework PDF and generate a hint for each question. Return the hints as an array of strings.
+        Format the response as a JSON object with a single key "hints" whose value is the array of hints.
+        Example format:
+        {
+            "hints": ["Hint for question 1", "Hint for question 2", "Hint for question 3"]
+        }
+        """
+        hints_result = analyze_pdf(file_path, hints_prompt)
 
         os.remove(file_path)  # Remove the uploaded file after processing
 
         return jsonify({
             'questions': questions,
             'options': options,
-            'answers': answers
+            'answers': answers,
+            'hints': hints_result['hints']
         })
     else:
         return jsonify({'error': 'Invalid file type'}), 400

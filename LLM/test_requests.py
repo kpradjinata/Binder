@@ -26,6 +26,11 @@ if response.status_code == 200:
         for j, option in enumerate(['A', 'B', 'C', 'D']):
             print(f"  {option}. {options[j]}")
         print(f"Correct Answer: {answer}\n")
+    
+    # Print the hints separately
+    print("Hints:")
+    for i, hint in enumerate(result['hints'], 1):
+        print(f"Hint {i}: {hint}")
 else:
     print(f"Error: {response.status_code}")
     print(response.text)
