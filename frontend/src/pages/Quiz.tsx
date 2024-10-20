@@ -4,6 +4,7 @@ import '../styles/Quiz.css';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useEffect, useRef } from 'react';
+import { useMutation } from 'convex/react';
 
 
 interface QuizData {
@@ -56,6 +57,10 @@ const Quiz: React.FC = () => {
 
   const fetchedQuiz: QuizData | undefined | null = useQuery(api.quizzes.getMostRecentQuiz);
 
+  const createStudentQuizResFirst = useMutation(api.student_quiz_res.createStudentQuizResFirst);
+  const createStudentQuizResSecond = useMutation(api.student_quiz_res.createStudentQuizResSecond);
+  const createStudentQuizResThird = useMutation(api.student_quiz_res.createStudentQuizResThird);
+
   useEffect(() => {
     if (fetchedQuiz && !quizDataRef.current) {
       quizDataRef.current = fetchedQuiz;
@@ -92,17 +97,53 @@ const Quiz: React.FC = () => {
     setQuizSubmitted(true);
   };
 
+
   const calculateScore = () => {
     let correctAnswers = 0;
     userAnswers.forEach((answer, index) => {
       console.log(quizData?.answers[index], answer);
 
       if (answer === quizData?.answerOptions[index][letterToIndexMap.get(quizData?.answers[index]) ?? 0]) {
+        if (0 <= index && index <= 2) {
+          createStudentQuizResFirst({
+            questionIndex: index,
+            isCorrect: 1,
+          });
+        } else if (3 <= index && index <= 5) {
+          createStudentQuizResSecond({
+            questionIndex: index,
+            isCorrect: 1,
+          });
+        } else {
+          createStudentQuizResThird({
+            questionIndex: index,
+            isCorrect: 1,
+          });
+        }
         correctAnswers++;
+      }
+      else {
+        if (0 <= index && index <= 2) {
+          createStudentQuizResFirst({
+            questionIndex: index,
+            isCorrect: 0,
+          });
+        } else if (3 <= index && index <= 5) {
+          createStudentQuizResSecond({
+            questionIndex: index,
+            isCorrect: 0,
+          });
+        } else {
+          createStudentQuizResThird({
+            questionIndex: index,
+            isCorrect: 0,
+          });
+        }
       }
     });
     return `${correctAnswers}/${quizData?.questions.length}`;
   };
+
 
   return (
     <div className="quiz-container">

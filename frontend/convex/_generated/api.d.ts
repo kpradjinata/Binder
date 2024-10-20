@@ -19,6 +19,7 @@ import type * as courses from "../courses.js";
 import type * as discussions from "../discussions.js";
 import type * as homeworks from "../homeworks.js";
 import type * as quizzes from "../quizzes.js";
+import type * as student_quiz_res from "../student_quiz_res.js";
 import type * as student_skills from "../student_skills.js";
 import type * as students from "../students.js";
 import type * as tasks from "../tasks.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   discussions: typeof discussions;
   homeworks: typeof homeworks;
   quizzes: typeof quizzes;
+  student_quiz_res: typeof student_quiz_res;
   student_skills: typeof student_skills;
   students: typeof students;
   tasks: typeof tasks;

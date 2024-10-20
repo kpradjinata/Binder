@@ -3,8 +3,9 @@ import Sidebar from "../components/Sidebar";
 import '../styles/CoursePage.css';
 import { useParams } from 'react-router-dom';
 import PDFToText from 'react-pdftotext';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { useEffect } from 'react';
 
 const CoursePage: React.FC = () => {
   const { courseName } = useParams<{ courseName: string }>();
@@ -31,6 +32,39 @@ const CoursePage: React.FC = () => {
 
   const createHomework = useMutation(api.homeworks.createHomework);
   const createQuiz = useMutation(api.quizzes.createQuiz);
+  const getAllStudentQuizResFirst = useQuery(api.student_quiz_res.getAllStudentQuizResFirst);
+  const getAllStudentQuizResSecond = useQuery(api.student_quiz_res.getAllStudentQuizResSecond);
+  const getAllStudentQuizResThird = useQuery(api.student_quiz_res.getAllStudentQuizResThird);
+
+
+  // Create a post request to group students based on quiz results
+  console.log(getAllStudentQuizResFirst);
+
+  useEffect(() => {
+    if (getAllStudentQuizResFirst && getAllStudentQuizResSecond && getAllStudentQuizResThird) {
+      fetch("http://localhost:5001/group_students", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([
+          getAllStudentQuizResFirst,
+          getAllStudentQuizResSecond,
+          getAllStudentQuizResThird
+        ]),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Grouped students:", data);
+        })
+        .catch((error) => {
+          console.error("Error grouping students:", error);
+        });
+    }
+  }, [getAllStudentQuizResFirst, getAllStudentQuizResSecond, getAllStudentQuizResThird]);
+
+
+  console.log(getAllStudentQuizResFirst);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -52,17 +86,16 @@ const CoursePage: React.FC = () => {
             const hints: string[] = data["hints"];
             const options: string[][] = data["options"];
             createHomework({
-              id: "hwid",
-              courseId: "test id",
+              subject: "EECS",
+              courseNumber: "16",
               name: "Homework 1",
               questions: questions,
               hints: hints,
             })
             createQuiz({
-              id: "quizid",
-              courseId: "test id",
+              subject: "EECS",
+              courseNumber: "16",
               name: "Quiz 1",
-              description: "Quiz 1",
               questions: questions,
               answerOptions: options,
               answers: answers,
@@ -82,15 +115,17 @@ const CoursePage: React.FC = () => {
   };
 
 
+
+
   return (
     <div className="course-page">
       <Sidebar />
       <main className="course-main-content">
         <h1 className="page-title">{courseName}</h1>
 
-        <section className="add-course card">
+        {/* <section className="add-course card"> */}
 
-        
+
         {/* <section className="add-course card">
 
           <h2>Add Course</h2>
@@ -112,7 +147,7 @@ const CoursePage: React.FC = () => {
 
 
         </section> */}
-        
+
 
         <section className="course-info card">
           <h2>MATH 101: Calculus I</h2>
