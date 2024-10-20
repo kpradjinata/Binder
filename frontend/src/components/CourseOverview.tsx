@@ -44,9 +44,9 @@ const CourseOverview: React.FC = () => {
     { name: 'English', instructor: 'Alphonso Thompson', progress: 77, image: '/english.jpg' },
     { name: 'Math', instructor: 'Oakland', progress: 96, image: '/math.png' },
     { name: 'HIST-107', instructor: 'Mr. Falck', progress: 0, image: '/history.png' },
-    { name: 'Physics', instructor: 'Dr. Einstein', progress: 85, image: '/path/to/physics-image.jpg' },
-    { name: 'Chemistry', instructor: 'Prof. Curie', progress: 62, image: '/path/to/chemistry-image.jpg' },
-    { name: 'Computer Science', instructor: 'Dr. Turing', progress: 90, image: '/path/to/cs-image.jpg' }
+    { name: 'Physics', instructor: 'Dr. Einstein', progress: 85, image: '/physics.webp' },
+    { name: 'Chemistry', instructor: 'Prof. Curie', progress: 62, image: '/chemistry.jpeg' },
+    { name: 'Computer Science', instructor: 'Dr. Turing', progress: 90, image: '/cs.jpeg' }
   ]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
