@@ -20,7 +20,6 @@ function App() {
         <Route path="/groups" element={<Groups />} />
         <Route path="/course/:courseName" element={<CoursePage />} />
 
-        
       </Routes>
     </Router>
   );

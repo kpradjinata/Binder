@@ -69,3 +69,5 @@ my-app/.vercel
 # typescript
 my-app/*.tsbuildinfo
 my-app/next-env.d.ts
+
+frontend/.env.local
