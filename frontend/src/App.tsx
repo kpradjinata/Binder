@@ -18,14 +18,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/discussion" element={<Discussion />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/course/:courseName" element={<CoursePage />} />
         <Route path="/content-library" element={<ContentLibrary />} />
         <Route path="/Profile" element={<Profile />} />
-        <Route path="/land" element={<LandingPage />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
 
       </Routes>
     </Router>
