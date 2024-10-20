@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import '../styles/CoursePage.css';
 import { useParams } from 'react-router-dom';
 import PDFToText from 'react-pdftotext';
-
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
@@ -22,16 +22,19 @@ const CoursePage: React.FC = () => {
   const [courseData, setCourseData] = useState<CourseData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [englishImage, setEnglishImage] = useState<string>("/english.jpg");
+  const [showQuizPopup, setShowQuizPopup] = useState(false);
+  const [quizButtonVisible, setQuizButtonVisible] = useState(false);
+  const navigate = useNavigate();
 
-  const upcomingQuizzes = [
-    { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
-    { id: 2, name: 'Chapter 5 Quiz', date: 'Oct 22, 2024' },
-  ];
+const upcomingQuizzes = [
+  { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
+  { id: 2, name: 'Chapter 5 Quiz', date: 'Oct 22, 2024' },
+];
 
-  const pastQuizzes = [
-    { id: 1, name: 'Chapter 3 Quiz', date: 'Sept 30, 2024', score: '85%' },
-    { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
-  ];
+const pastQuizzes = [
+  { id: 1, name: 'Chapter 3 Quiz', date: 'Sept 30, 2024', score: '85%' },
+  { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
+];
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -82,16 +85,65 @@ const CoursePage: React.FC = () => {
 
     fetchCourseData();
   }, [courseName, englishImage]);
+useEffect(() => {
+  const fetchCourseData = async () => {
+    const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
+    // const data = mockCourseData[urlFriendlyName || ''] || null;
+    const mockCourseData: Record<string, CourseData> = {
+      'english': {
+        name: 'English',
+        instructor: 'Alphonso Thompson',
+        description: 'Comprehensive English language and literature course.',
+        progress: 77
+      },
+      'math': {
+        name: 'Math',
+        instructor: 'Oakland',
+        description: 'Advanced mathematics covering algebra, calculus, and more.',
+        progress: 96
+      },
+      'hist-107': {
+        name: 'HIST-107',
+        instructor: 'Mr. Falck',
+        description: 'In-depth study of world history.',
+        progress: 0
+      },
+      'physics': {
+        name: 'Physics-121',
+        instructor: 'Dr. Einstein',
+        description: 'Study of Waves and Electromagnetism',
+        progress: 85
+      },
+      'chemistry': {
+        name: 'Chem-113',
+        instructor: 'Prof Curie',
+        description: 'Advanced Mechanistic Organic Chemsitry',
+        progress: 62
+      },
+      'computer-science': {
+        name: 'CS-170',
+        instructor: 'Dr. Turing',
+        description: 'Efficient Algorithms',
+        progress: 90
+      }
+    };
 
-  const createHomework = useMutation(api.homeworks.createHomework);
-  const createQuiz = useMutation(api.quizzes.createQuiz);
+    // Get the course data based on the URL parameter
+    const data = mockCourseData[courseName || ''] || null;
+    setCourseData(data);
+  };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  fetchCourseData();
+}, [courseName]);
+
+const createHomework = useMutation(api.homeworks.createHomework);
+const createQuiz = useMutation(api.quizzes.createQuiz);
+const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'application/pdf') {
       try {
         const text = await PDFToText(file);
-
+        setShowQuizPopup(true);
         fetch("http://localhost:8080/analyze_text", {
           method: "POST",
           headers: {
@@ -139,6 +191,16 @@ const CoursePage: React.FC = () => {
     return <div>Loading course data...</div>;
   }
 
+  const handleTakeQuiz = () => {
+    setShowQuizPopup(false);
+    navigate('/quiz');
+  };
+
+  const handleSkipQuiz = () => {
+    setShowQuizPopup(false);
+    setQuizButtonVisible(true);
+  };
+
   return (
     <div className="course-page">
       <Sidebar />
@@ -169,12 +231,19 @@ const CoursePage: React.FC = () => {
           >
             Upload Homework
           </button>
-          {pdfText && (
-            <div className="pdf-text">
-              <h3>Extracted Text:</h3>
-              <pre>{pdfText}</pre>
+          {showQuizPopup && (
+            <div className="quiz-popup">
+              <p>Do you want to take the quiz now?</p>
+              <button onClick={handleTakeQuiz}>Yes</button>
+              <button onClick={handleSkipQuiz}>No</button>
             </div>
           )}
+          {quizButtonVisible && (
+            <button className="take-quiz-btn" onClick={() => navigate('/quiz')}>
+              Take Quiz
+            </button>
+          )}
+          
         </section>
 
         <section className="quizzes card">
@@ -223,6 +292,7 @@ const CoursePage: React.FC = () => {
           <p className="group-info">15 members • Last active 2 hours ago</p>
           <button className="join-btn">Join Group</button>
         </section>
+
       </main>
     </div>
   );
