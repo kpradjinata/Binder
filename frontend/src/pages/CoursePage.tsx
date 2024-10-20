@@ -67,7 +67,7 @@ const CoursePage: React.FC = () => {
         'chemistry': {
           name: 'Chem-113',
           instructor: 'Prof Curie',
-          description: 'Advanced Mechanistic Organic Chemsitry;',
+          description: 'Advanced Mechanistic Organic Chemsitry',
           progress: 62
         },
         'computer-science': {
