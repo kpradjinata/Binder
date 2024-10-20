@@ -1,3 +1,21 @@
+.inbox-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.inbox-button:hover {
+  background-color: #357abd;
+}
+
 .inbox-popup-overlay {
   position: fixed;
   top: 0;
@@ -13,223 +31,165 @@
 
 .inbox-popup {
   background-color: white;
-  padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
-  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 800px;
+  height: 80%;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .inbox-popup h2 {
-  margin-top: 0;
-  color: #333;
-}
-
-.compose-button {
-  position: absolute;
-  top: 10px;
-  right: 40px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.compose-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.compose-popup {
-  background-color: white;
+  margin: 0;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.compose-popup h2 {
-  margin-top: 0;
-}
-
-.compose-form input,
-.compose-form textarea {
-  width: calc(100% -20px);
-}
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
+  background-color: #4a90e2;
+  color: white;
   font-size: 24px;
-  cursor: pointer;
-  color: #333;
-}
-
-.invitation-list {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.invitation-item {
-  border-bottom: 1px solid #eee;
-  padding: 15px 0;
-}
-
-.invitation-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.invitation-from {
-  font-weight: bold;
-  color: #333;
-}
-
-.invitation-subject {
-  color: #666;
-}
-
-.invitation-content {
-  margin-bottom: 10px;
-  color: #333;
-}
-.invitation-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.accept-button,
-.decline-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-
-.accept-button {
-  background-color: #4CAF50;
-  color: white;
-  margin-right: 10px;
-}
-
-.decline-button {
-  background-color: #f44336;
-  color: white;
-}
-
-/* .accept-button:hover,
-.decline-button:hover {
-  opacity: 1;
-} */
-
-.inbox-popup {
-  background-color: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
-  max-width: 400px;
-  width: 100%;
-  position: relative;
-}
-
-.inbox-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
 }
 
 .compose-button {
-  position: absolute;
-  top: 10px;
-  right: 80px;
-  /* Adjusted to align with the close button */
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 16px;
-  cursor: pointer;
+  margin: 10px 20px;
+  transition: background-color 0.3s ease;
 }
 
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #333;
+.compose-button:hover {
+  background-color: #45a049;
 }
 
-.invitation-list {
-  max-height: 300px;
+.message-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.message-list {
+  width: 40%;
+  border-right: 1px solid #e0e0e0;
   overflow-y: auto;
 }
 
-.invitation-item {
-  border-bottom: 1px solid #eee;
+.message-item {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.invitation-header {
-  display: flex;
+.message-item:hover {
+  background-color: #f5f5f5;
+}
+
+.message-from {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.message-subject {
+  color: #666;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.message-timestamp {
+  font-size: 12px;
+  color: #999;
+}
+
+.message-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.message-content h3 {
+  margin-top: 0;
+  color: #4a90e2;
+}
+
+.message-sender,
+.message-time {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.message-body {
+  line-height: 1.6;
 }
 
 .compose-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
+  padding: 20px;
 }
 
 .compose-form input,
 .compose-form textarea {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-  box-sizing: border-box;
   margin-bottom: 15px;
-  /* Increased margin for better spacing */
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.compose-form textarea {
+  height: 200px;
+  resize: vertical;
 }
 
 .compose-actions {
   display: flex;
-  justify-content: space-between;
-  /* Space between buttons */
-  margin-top: 15px;
-  /* Added margin for vertical spacing */
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.compose-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .compose-actions button:first-child {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
+}
+
+.compose-actions button:first-child:hover {
+  background-color: #45a049;
 }
 
 .compose-actions button:last-child {
   background-color: #f44336;
   color: white;
+}
+
+.compose-actions button:last-child:hover {
+  background-color: #d32f2f;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
 }
