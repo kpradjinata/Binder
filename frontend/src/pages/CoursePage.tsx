@@ -1,15 +1,21 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Sidebar from "../components/Sidebar";
 import '../styles/CoursePage.css';
 import { useParams } from 'react-router-dom';
-import PDFToText  from 'react-pdftotext';
+import PDFToText from 'react-pdftotext';
+
+interface CourseData {
+  name: string;
+  instructor: string;
+  description: string;
+  progress: number;
+}
 
 const CoursePage: React.FC = () => {
   const { courseName } = useParams<{ courseName: string }>();
-  // const [subject, setSubject] = useState('');
-  // const [courseNumber, setCourseNumber] = useState('');
   const [activeTab, setActiveTab] = useState('upcoming');
   const [pdfText, setPdfText] = useState('');
+  const [courseData, setCourseData] = useState<CourseData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const upcomingQuizzes = [
@@ -22,10 +28,39 @@ const CoursePage: React.FC = () => {
     { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
   ];
 
-  // const handleAddCourse = () => {
-  //   console.log(`Adding course: ${subject} ${courseNumber}`);
-  //   // Implement course addition logic here
-  // };
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
+      // const data = mockCourseData[urlFriendlyName || ''] || null;
+      const mockCourseData: Record<string, CourseData> = {
+        'english': {
+          name: 'English',
+          instructor: 'Alphonso Thompson',
+          description: 'Comprehensive English language and literature course.',
+          progress: 77
+        },
+        'math': {
+          name: 'Math',
+          instructor: 'Oakland',
+          description: 'Advanced mathematics covering algebra, calculus, and more.',
+          progress: 96
+        },
+        'hist-107': {
+          name: 'HIST-107',
+          instructor: 'Mr. Falck',
+          description: 'In-depth study of world history.',
+          progress: 0
+        },
+        // Add more courses as needed
+      };
+
+      // Get the course data based on the URL parameter
+      const data = mockCourseData[courseName || ''] || null;
+      setCourseData(data);
+    };
+
+    fetchCourseData();
+  }, [courseName]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -43,38 +78,24 @@ const CoursePage: React.FC = () => {
     }
   };
 
+  if (!courseData) {
+    return <div>Loading course data...</div>;
+  }
 
   return (
     <div className="course-page">
       <Sidebar />
       <main className="course-main-content">
-        <h1 className="page-title">{courseName}</h1>
-        
-        {/* <section className="add-course card">
-          <h2>Add Course</h2>
-          <input
-            type="text"
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Course Number"
-            value={courseNumber}
-            onChange={(e) => setCourseNumber(e.target.value)}
-          />
-          <button onClick={handleAddCourse}>Add Course</button>
-        </section> */}
+        <h1 className="page-title">{courseData.name}</h1>
         
         <section className="course-info card">
-          <h2>MATH 101: Calculus I</h2>
-          <p className="instructor">Instructor: Dr. Jane Smith</p>
-          <p className="description">Introduction to differential and integral calculus.</p>
+          <h2>{courseData.name}</h2>
+          <p className="instructor">Instructor: {courseData.instructor}</p>
+          <p className="description">{courseData.description}</p>
           <div className="progress-bar">
-            <div className="progress" style={{width: '70%'}}></div>
+            <div className="progress" style={{width: `${courseData.progress}%`}}></div>
           </div>
-          <p className="progress-text">Progress: 70%</p>
+          <p className="progress-text">Progress: {courseData.progress}%</p>
           <input 
             type="file" 
             accept=".pdf" 
