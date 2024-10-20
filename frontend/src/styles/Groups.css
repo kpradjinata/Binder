@@ -80,15 +80,42 @@ button:hover {
   margin-bottom: 12px;
   font-size: 16px;
 }
+.group-finder-section {
+  margin-bottom: 30px;
+}
+
+.group-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.join-group-btn, .create-group-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.join-group-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.join-group-btn:hover {
+  background-color: #45a049;
+}
 
 .create-group-btn {
-  display: block;
-  width: 100%;
-  margin-top: 16px;
-  background-color: #f1f1f0;
-  text-align: center;
-  padding: 12px;
-  font-size: 16px;
+  background-color: #008CBA;
+  color: white;
+}
+
+.create-group-btn:hover {
+  background-color: #007B9E;
 }
 
 .group-list {
@@ -147,4 +174,189 @@ button:hover {
 .post-meeting-quiz p {
   font-size: 14px;
   color: #6b6b6b;
+}
+
+.recommendations ul li {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.recommendations ul li:hover {
+  background-color: #f0f0f0;
+}
+
+.recommendations ul li.selected {
+  background-color: #e6f7ff;
+  font-weight: bold;
+}
+
+.group-scheduler-section {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.group-scheduler-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.scheduler-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.invite-users {
+  width: 100%;
+}
+
+.invite-users h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #555;
+}
+.invite-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.invite-form input {
+  flex: 1 1 calc(50% - 8px); /* This makes both inputs take up equal width */
+  min-width: 200px; /* Ensures a minimum width for the inputs */
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.invite-form button {
+  flex: 1 1 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+}
+
+.invite-form button:hover {
+  background-color: #0056b3;
+}
+.integration-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.integration-btn {
+  flex: 1;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.google-btn {
+  background-color: #4285F4;
+  color: white;
+}
+
+.google-btn:hover {
+  background-color: #3367D6;
+}
+
+.zoom-btn {
+  background-color: #2D8CFF;
+  color: white;
+}
+
+.zoom-btn:hover {
+  background-color: #2681F2;
+}
+
+
+.recommendations ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.recommendations .join-btn {
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.recommendations .join-btn:hover {
+  background-color: #45a049;
+}
+
+.recommendations .join-btn.joined {
+  background-color: #ccc;
+  cursor: default;
+}
+
+.recommendations li.joined {
+  background-color: #f0f0f0;
+}
+
+.group-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.group-details-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.group-details-content h2 {
+  margin-top: 0;
+}
+
+.group-details-content ul {
+  padding-left: 20px;
 }

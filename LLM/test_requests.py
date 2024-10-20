@@ -1,3 +1,24 @@
+#Test for grouping and skill mastery
+
+import requests
+
+url = 'http://localhost:5001/group_students'
+files = {
+    'skill1': open('skill1.csv', 'rb'),
+    'skill2': open('skill2.csv', 'rb'),
+    'skill3': open('skill3.csv', 'rb')
+}
+
+response = requests.post(url, files=files)
+if response.status_code == 200:
+    grouped_students = response.json()
+    print(grouped_students)
+else:
+    print(f"Error: {response.status_code}, {response.text}")
+
+
+#testing generate categories
+    '''
 import requests
 import json
 
@@ -75,3 +96,4 @@ if response.status_code == 200:
 else:
     print(f"Error: {response.status_code}")
     print(response.text)
+'''
