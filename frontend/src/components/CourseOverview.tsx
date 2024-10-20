@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
 import '../styles/CourseOverview.css';
 
 interface Course {
@@ -18,9 +17,9 @@ const CourseCard: React.FC<Course> = ({ name, instructor, progress, image }) => 
         <h3 className="course-title">{name}</h3>
         <p className="instructor-name">{instructor}</p>
         <div className="progress-bar">
-          <div 
-            className="progress" 
-            style={{ 
+          <div
+            className="progress"
+            style={{
               width: `${progress}%`,
               backgroundColor: progress === 100 ? '#4CAF50' : '#FFA500'
             }}
@@ -38,7 +37,7 @@ const CourseCard: React.FC<Course> = ({ name, instructor, progress, image }) => 
 const CourseOverview: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
-  const courses: Course[] = [
+  const [courses, setCourses] = useState<Course[]>([
     { name: 'English', instructor: 'Alphonso Thompson', progress: 77, image: '/path/to/english-image.jpg' },
     { name: 'Math', instructor: 'Oakland', progress: 96, image: '/path/to/math-image.jpg' },
     { name: 'HIST-107', instructor: 'Mr. Falck', progress: 0, image: '/path/to/history-image.jpg' },
@@ -61,7 +60,10 @@ const CourseOverview: React.FC = () => {
     { name: 'Anthropology', instructor: 'Dr. Mead', progress: 73, image: '/path/to/anthropology-image.jpg' },
     { name: 'Linguistics', instructor: 'Prof. Chomsky', progress: 92, image: '/path/to/linguistics-image.jpg' },
     { name: 'World Religions', instructor: 'Dr. Eliade', progress: 60, image: '/path/to/religions-image.jpg' }
-  ];
+  ]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [newCourseName, setNewCourseName] = useState('');
+  const [newInstructorName, setNewInstructorName] = useState('');
 
   const coursesPerPage = 4;
   const totalPages = Math.ceil(courses.length / coursesPerPage);
@@ -80,10 +82,25 @@ const CourseOverview: React.FC = () => {
     }
   };
 
+  const handleAddCourse = () => {
+    if (newCourseName && newInstructorName) {
+      const newCourse: Course = {
+        name: newCourseName,
+        instructor: newInstructorName,
+        progress: 0,
+        image: '/path/to/default-image.jpg'
+      };
+      setCourses(prevCourses => [...prevCourses, newCourse]);
+      setNewCourseName('');
+      setNewInstructorName('');
+      setIsPopupOpen(false); // Close the popup
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setSlideDirection(null);
-    }, 300); // Match this with your CSS transition duration
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [currentPage]);
@@ -101,10 +118,48 @@ const CourseOverview: React.FC = () => {
           <CourseCard key={`${currentPage}-${index}`} {...course} />
         ))}
       </div>
-      <div className="navigation-buttons">
-        <button className="nav-button" onClick={handlePrevious} disabled={currentPage === 0}>&lt;</button>
-        <button className="nav-button" onClick={handleNext} disabled={currentPage === totalPages - 1}>&gt;</button>
+      <div className="navigation-container">
+        <button className="nav-button" onClick={handlePrevious} disabled={currentPage === 0}>
+          &lt;
+        </button>
+        <button className="add-course-button" onClick={() => setIsPopupOpen(true)}>
+          Add Course
+        </button>
+        <button className="nav-button" onClick={handleNext} disabled={currentPage === totalPages - 1}>
+          &gt;
+        </button>
       </div>
+
+      {/* Popup for adding a course */}
+      {isPopupOpen && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2>Add New Course</h2>
+            <label>
+              Course Name:
+              <input
+                type="text"
+                value={newCourseName}
+                onChange={(e) => setNewCourseName(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Instructor Name:
+              <input
+                type="text"
+                value={newInstructorName}
+                onChange={(e) => setNewInstructorName(e.target.value)}
+                required
+              />
+            </label>
+            <div className="popup-buttons">
+              <button onClick={handleAddCourse}>Add Course</button>
+              <button onClick={() => setIsPopupOpen(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
