@@ -107,12 +107,7 @@ const Dashboard: React.FC = () => {
       <Sidebar />
       <main className="main-content">
         <div className="left-column">
-          <CourseOverview 
-            courses={courses} 
-            onAddCourse={handleAddCourse} 
-            onFileUpload={handleFileUpload}
-            fileInputRef={fileInputRef}
-          />
+          <CourseOverview />
           <UpcomingEvents />
           {pdfText && (
             <div className="pdf-text">
