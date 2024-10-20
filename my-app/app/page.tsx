@@ -14,39 +14,39 @@ export default function Home() {
   const [task, setTask] = useState("");
   const createTask = useMutation(api.tasks.createTask);
   const tasks = useQuery(api.tasks.getTasks);
-  const userId = useQuery(api.students.getCurrentStudentId);
+  // const userId = useQuery(api.students.getCurrentStudentId);
 
-  const createHomework = useMutation(api.homeworks.createHomework);
-  const createQuiz = useMutation(api.quizzes.createQuiz);
+  // const createHomework = useMutation(api.homeworks.createHomework);
+  // const createQuiz = useMutation(api.quizzes.createQuiz);
 
   const { user } = useUser();
 
-  function createHomeworkHandler() {
-    homework = fetch()
+  // function createHomeworkHandler() {
+  //   homework = fetch()
 
-    createHomework({
-      id: "1",
-      courseId: "1",
-    })
-  }
+  //   createHomework({
+  //     id: "1",
+  //     courseId: "1",
+  //   })
+  // }
 
-  function createQuizHandler() {
-    quiz = fetch()
+  // function createQuizHandler() {
+  //   quiz = fetch()
 
-    createHomework({
-      id: "1",
-      courseId: "1",
-    })
-  }
+  //   createHomework({
+  //     id: "1",
+  //     courseId: "1",
+  //   })
+  // }
 
 
-  function createDiscussionHandler() {
+  // function createDiscussionHandler() {
 
-  }
+  // }
 
-  function createCourseHandler() {
+  // function createCourseHandler() {
 
-  }
+  // }
 
 
 
@@ -72,7 +72,6 @@ export default function Home() {
           {tasks?.map((task) => (
             <li key={task._id}>{task.text}</li>
           ))}
-          {userId}
         </ul>
         <span>Logged in as {user?.fullName}</span>;
 
