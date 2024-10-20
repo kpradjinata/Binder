@@ -6,7 +6,6 @@ import PDFToText from 'react-pdftotext';
 import { useMutation, useQuery } from 'convex/react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../convex/_generated/api';
-import { useEffect } from 'react';
 
 interface CourseData {
   name: string;
