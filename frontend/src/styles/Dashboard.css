@@ -22,7 +22,7 @@
 }
 
 .right-column {
-  width: 250px; /* Fixed width for right column */
+  width: 300px; /* Fixed width for right column */
   position: fixed;
   top: 0;
   right: 0;

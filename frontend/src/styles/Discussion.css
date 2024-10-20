@@ -1,44 +1,60 @@
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f7f7f7;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f9f9f9;
   margin: 0;
   padding: 0;
+  color: #333;
 }
 
 .discussion-container {
   display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
   height: 100vh;
-  margin-left: 250px;
-  /* Full viewport height */
 }
 
-.thread-navigation {
+.discussion-content {
+  flex: 1;
+  display: flex;
+  margin-left: 230px;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.thread-list-container {
   width: 300px;
   background-color: #ffffff;
   overflow-y: auto;
   height: 100vh;
   position: sticky;
   top: 0;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-  margin-left: 20px;
+  padding: 20px;
+  border-right: 1px solid #e0e0e0;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.thread-detail-container {
+  flex: 1;
+  padding-left: 40px;
 }
 
 .new-thread-button {
-  background-color: #6c63ff;
-  color: white;
+  background-color: #7f33ff;
+  color: #ffffff;
   border: none;
-  border-radius: 50px;
-  padding: 10px 20px;
+  border-radius: 9px;
+  padding: 12px 20px;
   cursor: pointer;
   font-size: 16px;
-  width: calc(100% - 40px);
-  margin: 10px auto;
+  font-weight: 600;
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 .new-thread-button:hover {
-  background-color: #5a53e5;
+  background-color: #682bce;
 }
 
 .thread-list {
@@ -48,44 +64,41 @@ body {
 }
 
 .thread-list li {
-  padding: 15px;
+  padding: 16px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
-  transition: background-color .3s, box-shadow .3s;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.3s ease;
 }
 
-.thread-list li.active,
 .thread-list li:hover {
-  background-color: #f8f9fa;
+  background-color: #f5f5f5;
 }
 
-.discussion-content {
-  flex-grow: 1;
-  padding: 20px;
+.thread-list li a {
+  text-decoration: none;
+  color: #333;
+  display: block;
 }
 
-.thread-content {
-  background-color: white;
+.thread-detail {
+  background-color: #ffffff;
   border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  border: 1px solid black;
-  /* Black border */
 }
 
 .comment {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 10px;
-  border: 1px solid black;
-  /* Black border */
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 16px;
+  margin-top: 16px;
 }
 
 .author {
-  font-weight: bold;
+  font-weight: 600;
   margin-right: 10px;
+  color: #4a90e2;
 }
 
 .timestamp {
@@ -97,39 +110,122 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  color: black;
+  color: #4a90e2;
   font-size: 18px;
   margin-right: 5px;
+  transition: color 0.3s ease;
+}
+
+.like-button:hover {
+  color: #3a7bc8;
 }
 
 .add-comment {
-  flex-grow: 1;
+  width: 100%;
   padding: 12px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: #f0f0f0;
+  margin-top: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #ffffff;
+  transition: border-color 0.3s ease;
 }
 
-.add-comment::placeholder {
-  color: #888;
+.add-comment:focus {
+  border-color: #4a90e2;
+  outline: none;
 }
 
 .post-comment-button {
-  background-color: #6c63ff;
-  color: white;
+  background-color: #4a90e2;
+  color: #ffffff;
   border: none;
-  border-radius: 50px;
+  border-radius: 4px;
   padding: 10px 20px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
+  margin-top: 12px;
+  transition: background-color 0.3s ease;
 }
 
 .post-comment-button:hover {
-  background-color: #5a53e5;
+  background-color: #3a7bc8;
 }
 
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 32px;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.search-filter input {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.search-filter input:focus {
+  border-color: #4a90e2;
+  outline: none;
+}
+
+.filter-btn {
+  background-color: #4a90e2;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-btn:hover {
+  background-color: #3a7bc8;
+}
+
+.group-item {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.group-item:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.join-btn {
+  background-color: #4a90e2;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.join-btn:hover {
+  background-color: #3a7bc8;
+}
 
 .modal-overlay {
   position: fixed;
@@ -145,42 +241,148 @@ body {
 }
 
 .modal-content {
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-  width: 400px;
-  max-width: 90%;
-}
-
-.modal-content input[type="text"],
-.modal-content textarea {
-  width: calc(100% - 24px);
-  /* Adjust for padding */
-  padding: 12px;
-  margin-bottom: 15px;
+  background-color: #ffffff;
   border-radius: 8px;
-  font-size: 16px;
-  border: none;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, .1);
+  padding: 24px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: #4a90e2;
+  outline: none;
 }
 
 .modal-content textarea {
-  height: 100px;
+  height: 150px;
+  resize: vertical;
 }
 
 .modal-content button {
-  background-color: #6c63ff;
-  color: white;
+  background-color: #7f33ff;
+  color: #ffffff;
   border: none;
-  border-radius: 50px;
+  border-radius: 4px;
   padding: 10px 20px;
-  cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   margin-right: 10px;
-  transition: background-color .3s ease-in-out;
 }
 
 .modal-content button:hover {
-  background-color: #5a53e5;
+  background-color: #682bce;
 }
+
+.modal-content button:last-child {
+  background-color: #f1f1f0;
+  color: #333;
+}
+
+.modal-content button:last-child:hover {
+  background-color: #e0e0e0;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+}
+
+.close-modal:hover {
+  color: #333;
+}
+
+.new-comment-form {
+  margin-top: 20px;
+}
+
+.new-comment-form textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.new-comment-form button {
+  background-color: #2369ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-comment-form button:hover {
+  background-color: #1c54cc;
+}
+
+.thread-list li a {
+  text-decoration: none;
+  /* Remove underlines */
+  color: inherit;
+  /* Inherit color from parent */
+  transition: transform 0.2s ease;
+  /* Add transition for transform only */
+}
+
+.thread-list li a:hover {
+  transform: translateX(5px);
+  /* Slide right on hover */
+}
+
+.new-thread-button {
+  background-color: #7f33ff;
+  /* Keep original background color */
+  color: #ffffff;
+  /* Keep original text color */
+  transition: transform 0.2s ease;
+  /* Add transition for transform */
+}
+
+.new-thread-button:hover {
+  transform: scale(1.05);
+  /* Slightly scale up on hover */
+}
+
+.thread-list li {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.thread-list li.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+

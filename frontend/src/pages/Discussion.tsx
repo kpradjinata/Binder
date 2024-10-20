@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, Routes, Route, useParams } from 'react-router-dom';
 import '../styles/Discussion.css';
 import { HeartFilledIcon, PlusIcon } from "@radix-ui/react-icons";
-import Sidebar from '../components/Sidebar'
+import Sidebar from '../components/Sidebar';
 
 interface Thread {
   id: number;
@@ -20,8 +21,77 @@ interface Comment {
   likes: number;
 }
 
+const ThreadList: React.FC<{ threads: Thread[], onNewThread: () => void, loadedThreads: Set<number> }> = 
+  ({ threads, onNewThread, loadedThreads }) => (
+  <div className="thread-navigation">
+    <button onClick={onNewThread} className="new-thread-button">
+      <PlusIcon /> New Thread
+    </button>
+    <ul className="thread-list">
+      {threads.map((thread) => (
+        <li key={thread.id} className={loadedThreads.has(thread.id) ? 'loaded' : ''}>
+          <Link to={`/discussion/${thread.id}`}>{thread.title}</Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
+interface ThreadDetailProps {
+  threads: Thread[];
+  comments: Record<number, Comment[]>;
+  createNewComment: (threadId: number, content: string) => void;
+}
+
+const ThreadDetail: React.FC<ThreadDetailProps> = ({ threads, comments, createNewComment }) => {
+  const { threadId } = useParams<{ threadId: string }>();
+  const thread = threads.find(t => t.id === Number(threadId));
+  const [newCommentContent, setNewCommentContent] = useState('');
+  const [newCommentId, setNewCommentId] = useState<number | null>(null);
+  
+  if (!thread) return <div>Thread not found</div>;
+
+  const threadComments = comments[thread.id] || [];
+
+  const handleCreateComment = () => {
+    if (newCommentContent.trim()) {
+      const commentId = Date.now();
+      createNewComment(thread.id, newCommentContent);
+      setNewCommentContent('');
+      setNewCommentId(commentId);
+      setTimeout(() => setNewCommentId(null), 300); // Reset after animation duration
+    }
+  };
+
+  return (
+    <div className="thread-detail">
+      <h2>{thread.title}</h2>
+      <p>{thread.content}</p>
+      <div className="comments">
+        {threadComments.map(comment => (
+          <div 
+            key={comment.id} 
+            className={`comment ${comment.id === newCommentId ? 'fade-in' : ''}`}
+          >
+            <p>{comment.content}</p>
+            <span>{comment.author} - {comment.timestamp}</span>
+          </div>
+        ))}
+      </div>
+      <div className="new-comment-form">
+        <textarea
+          value={newCommentContent}
+          onChange={(e) => setNewCommentContent(e.target.value)}
+          placeholder="Write a comment..."
+        />
+        <button onClick={handleCreateComment}>Post Comment</button>
+      </div>
+    </div>
+  );
+};
+
+
 const Discussion: React.FC = () => {
-  const [currentThreadIndex, setCurrentThreadIndex] = useState(0);
   const [threads, setThreads] = useState<Thread[]>([
     {
       id: 389,
@@ -94,28 +164,34 @@ const Discussion: React.FC = () => {
     ]
   });
 
+  const [showNewThreadForm, setShowNewThreadForm] = useState(false);
   const [newThreadTitle, setNewThreadTitle] = useState('');
   const [newThreadContent, setNewThreadContent] = useState('');
-  const [newCommentContent, setNewCommentContent] = useState('');
-  const [showNewThreadForm, setShowNewThreadForm] = useState(false);
+  const [loadedThreads, setLoadedThreads] = useState<Set<number>>(new Set());
 
-  const currentThread = threads[currentThreadIndex];
-  const currentComments = comments[currentThread.id] || [];
+  useEffect(() => {
+    threads.forEach((thread, index) => {
+      setTimeout(() => {
+        setLoadedThreads(prev => new Set(prev).add(thread.id));
+      }, index * 100); // Stagger the loading by 100ms per thread
+    });
+  }, [threads]);
 
-  const likeThread = () => {
-    setThreads(prevThreads => prevThreads.map(thread =>
-      thread.id === currentThread.id ? { ...thread, likes: thread.likes + 1 } : thread
-    ));
-  };
 
-  const likeComment = (commentId: number) => {
+  const createNewComment = (threadId: number, content: string) => {
+    const newComment: Comment = {
+      id: Date.now(), // Use the current timestamp as the ID
+      author: "Anonymous User",
+      content: content,
+      timestamp: "Just now",
+      likes: 0
+    };
     setComments(prevComments => ({
       ...prevComments,
-      [currentThread.id]: prevComments[currentThread.id].map(comment =>
-        comment.id === commentId ? { ...comment, likes: comment.likes + 1 } : comment
-      )
+      [threadId]: [...(prevComments[threadId] || []), newComment]
     }));
   };
+  
 
   const createNewThread = () => {
     if (newThreadTitle && newThreadContent) {
@@ -128,88 +204,45 @@ const Discussion: React.FC = () => {
         likes: 0
       };
       setThreads([...threads, newThread]);
-      setCurrentThreadIndex(threads.length);
       setNewThreadTitle('');
       setNewThreadContent('');
       setShowNewThreadForm(false);
     }
   };
 
-  const createNewComment = () => {
-    if (newCommentContent) {
-      const newComment: Comment = {
-        id: Date.now(),
-        author: "Anonymous User",
-        content: newCommentContent,
-        timestamp: "Just now",
-        likes: 0
-      };
-      setComments(prevComments => ({
-        ...prevComments,
-        [currentThread.id]: [...(prevComments[currentThread.id] || []), newComment]
-      }));
-      setNewCommentContent('');
-    }
-  };
-
-  return (
-    <div className="discussion-container">
-      <Sidebar />
-      <div className="thread-navigation">
-        <button onClick={() => setShowNewThreadForm(true)} className="new-thread-button">
-          <PlusIcon /> New Thread
-        </button>
-        <ul className="thread-list">
-          {threads.map((thread, index) => (
-            <li key={thread.id} onClick={() => setCurrentThreadIndex(index)} className={index === currentThreadIndex ? 'active' : ''}>
-              {thread.title}
-            </li>
-          ))}
-        </ul>
+return (
+  <div className="discussion-container">
+    <Sidebar />
+    <div className="discussion-content">
+      <div className="thread-list-container">
+        <ThreadList 
+          threads={threads} 
+          onNewThread={() => setShowNewThreadForm(true)} 
+          loadedThreads={loadedThreads}
+        />
       </div>
-
-      <div className="discussion-content">
-        <div className="thread-content">
-          <h1>{currentThread.title} <span className="thread-id">#{currentThread.id}</span></h1>
-          <div className="thread-info">
-            <strong className="author">{currentThread.author}</strong>
-            <span className="timestamp">{currentThread.timestamp}</span>
-          </div>
-          <p className="thread-body">{currentThread.content}</p>
-          <div className="thread-actions">
-            <button onClick={likeThread} className="like-button"><HeartFilledIcon /></button>
-            <span>{currentThread.likes}   Likes</span>
-          </div>
-          <h2>{currentComments.length} Answer{currentComments.length !== 1 ? 's' : ''}</h2>
-          {currentComments.map(comment => (
-            <div key={comment.id} className="comment">
-              <div className="comment-header">
-                <span className="author">{comment.author}</span>
-                <span className="timestamp">{comment.timestamp}</span>
-              </div>
-              <p className="comment-body">{comment.content}</p>
-              <div className="comment-actions">
-                <button onClick={() => likeComment(comment.id)} className="like-button"><HeartFilledIcon /></button>
-                <span>{comment.likes} Likes</span>
-              </div>
-            </div>
-          ))}
-          <div className="new-comment-form">
-            <input
-              type="text"
-              placeholder="Add comment"
-              value={newCommentContent}
-              onChange={(e) => setNewCommentContent(e.target.value)}
-              className="add-comment"
-            />
-            <button onClick={createNewComment} className="post-comment-button">Post</button>
-          </div>
-        </div>
+      <div className="thread-detail-container">
+        <h1 className="page-title">Discussions</h1>
+        <Routes>
+          <Route 
+            path="/:threadId" 
+            element={
+              <ThreadDetail 
+                threads={threads} 
+                comments={comments} 
+                createNewComment={createNewComment}
+              />
+            } 
+          />
+          <Route path="/" element={<div className="select-thread-message">Select a thread or create a new one</div>} />
+        </Routes>
       </div>
+    </div>
 
       {showNewThreadForm && (
         <div className="modal-overlay" onClick={() => setShowNewThreadForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-modal" onClick={() => setShowNewThreadForm(false)}>&times;</button>
             <h2>Create New Thread</h2>
             <input
               type="text"

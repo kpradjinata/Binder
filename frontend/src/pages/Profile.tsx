@@ -15,18 +15,18 @@ interface Experience {
 }
 
 const Profile: React.FC = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('johndoe@example.com');
-  const [bio, setBio] = useState('I am a student passionate about learning and collaborating with others.');
+  const [name, setName] = useState('Nam Do San');
+  const [email, setEmail] = useState('SamSan Tech.com');
+  const [bio, setBio] = useState('Im a tech founder focused on the intersection between healthcare and AI. Looking forward to learning!');
   const [education, setEducation] = useState<Education[]>([
     { institution: 'University of California, Berkeley', degree: 'Bachelor of Science in Computer Science', year: '2020-2024' }
   ]);
   const [experience, setExperience] = useState<Experience[]>([
-    { company: 'Tech Innovators Inc.', position: 'Software Engineering Intern', duration: 'Summer 2023' }
+    { company: 'SamSan Tech', position: 'Founding Engineer', duration: 'Summer 2023' }
   ]);
   const [skills, setSkills] = useState<string[]>(['JavaScript', 'React', 'Node.js', 'Python']);
   const [isEditing, setIsEditing] = useState(false);
-  const [image, setImage] = useState<string>("/Nam-Joo-Hyuk.jpg");
+  const [image, setImage] = useState<string>("/nam.jpg");
 
   useEffect(() => {
     const img = new Image();

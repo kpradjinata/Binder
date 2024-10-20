@@ -1,34 +1,138 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Sidebar from "../components/Sidebar";
 import '../styles/CoursePage.css';
 import { useParams } from 'react-router-dom';
 import PDFToText from 'react-pdftotext';
 import { useMutation, useQuery } from 'convex/react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../convex/_generated/api';
 import { useEffect } from 'react';
 
+interface CourseData {
+  name: string;
+  instructor: string;
+  description: string;
+  progress: number;
+  image?: string;
+}
+
 const CoursePage: React.FC = () => {
   const { courseName } = useParams<{ courseName: string }>();
-  // const [subject, setSubject] = useState('');
-  // const [courseNumber, setCourseNumber] = useState('');
   const [activeTab, setActiveTab] = useState('upcoming');
   const [pdfText, setPdfText] = useState('');
+  const [courseData, setCourseData] = useState<CourseData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [englishImage, setEnglishImage] = useState<string>("/english.jpg");
+  const [showQuizPopup, setShowQuizPopup] = useState(false);
+  const [quizButtonVisible, setQuizButtonVisible] = useState(false);
+  const navigate = useNavigate();
 
-  const upcomingQuizzes = [
-    { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
-    { id: 2, name: 'Chapter 5 Quiz', date: 'Oct 22, 2024' },
-  ];
+const upcomingQuizzes = [
+  { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
+  { id: 2, name: 'Chapter 5 Quiz', date: 'Oct 22, 2024' },
+];
 
-  const pastQuizzes = [
-    { id: 1, name: 'Chapter 3 Quiz', date: 'Sept 30, 2024', score: '85%' },
-    { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
-  ];
+const pastQuizzes = [
+  { id: 1, name: 'Chapter 3 Quiz', date: 'Sept 30, 2024', score: '85%' },
+  { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
+];
 
-  // const handleAddCourse = () => {
-  //   console.log(`Adding course: ${subject} ${courseNumber}`);
-  //   // Implement course addition logic here
-  // };
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
+      const mockCourseData: Record<string, CourseData> = {
+        'english': {
+          name: 'English',
+          instructor: 'Alphonso Thompson',
+          description: 'Comprehensive English language and literature course.',
+          progress: 77,
+          image: englishImage
+        },
+        'math': {
+          name: 'Math',
+          instructor: 'Oakland',
+          description: 'Advanced mathematics covering algebra, calculus, and more.',
+          progress: 96
+        },
+        'hist-107': {
+          name: 'HIST-107',
+          instructor: 'Mr. Falck',
+          description: 'In-depth study of world history.',
+          progress: 0
+        },
+        'physics': {
+          name: 'Physics-121',
+          instructor: 'Dr. Einstein',
+          description: 'Study of Waves and Electromagnetism',
+          progress: 85
+        },
+        'chemistry': {
+          name: 'Chem-113',
+          instructor: 'Prof Curie',
+          description: 'Advanced Mechanistic Organic Chemsitry',
+          progress: 62
+        },
+        'computer-science': {
+          name: 'CS-170',
+          instructor: 'Dr. Turing',
+          description: 'Efficient Algorithms',
+          progress: 90
+        }
+      };
+
+      const data = mockCourseData[courseName || ''] || null;
+      setCourseData(data);
+    };
+
+    fetchCourseData();
+  }, [courseName, englishImage]);
+useEffect(() => {
+  const fetchCourseData = async () => {
+    const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
+    // const data = mockCourseData[urlFriendlyName || ''] || null;
+    const mockCourseData: Record<string, CourseData> = {
+      'english': {
+        name: 'English',
+        instructor: 'Alphonso Thompson',
+        description: 'Comprehensive English language and literature course.',
+        progress: 77
+      },
+      'math': {
+        name: 'Math',
+        instructor: 'Oakland',
+        description: 'Advanced mathematics covering algebra, calculus, and more.',
+        progress: 96
+      },
+      'hist-107': {
+        name: 'HIST-107',
+        instructor: 'Mr. Falck',
+        description: 'In-depth study of world history.',
+        progress: 0
+      },
+      'physics': {
+        name: 'Physics-121',
+        instructor: 'Dr. Einstein',
+        description: 'Study of Waves and Electromagnetism',
+        progress: 85
+      },
+      'chemistry': {
+        name: 'Chem-113',
+        instructor: 'Prof Curie',
+        description: 'Advanced Mechanistic Organic Chemsitry',
+        progress: 62
+      },
+      'computer-science': {
+        name: 'CS-170',
+        instructor: 'Dr. Turing',
+        description: 'Efficient Algorithms',
+        progress: 90
+      }
+    };
+
+    // Get the course data based on the URL parameter
+    const data = mockCourseData[courseName || ''] || null;
+    setCourseData(data);
+  };
 
   const createHomework = useMutation(api.homeworks.createHomework);
   const createQuiz = useMutation(api.quizzes.createQuiz);
@@ -65,13 +169,17 @@ const CoursePage: React.FC = () => {
 
 
   console.log(getAllStudentQuizResFirst);
+  fetchCourseData();
+}, [courseName]);
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+const createHomework = useMutation(api.homeworks.createHomework);
+const createQuiz = useMutation(api.quizzes.createQuiz);
+const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'application/pdf') {
       try {
         const text = await PDFToText(file);
-
+        setShowQuizPopup(true);
         fetch("http://localhost:8080/analyze_text", {
           method: "POST",
           headers: {
@@ -114,6 +222,19 @@ const CoursePage: React.FC = () => {
     }
   };
 
+  if (!courseData) {
+    return <div>Loading course data...</div>;
+  }
+
+  const handleTakeQuiz = () => {
+    setShowQuizPopup(false);
+    navigate('/quiz');
+  };
+
+  const handleSkipQuiz = () => {
+    setShowQuizPopup(false);
+    setQuizButtonVisible(true);
+  };
 
 
 
@@ -148,19 +269,23 @@ const CoursePage: React.FC = () => {
 
         </section> */}
 
+        <h1 className="page-title">{courseData.name}</h1>
 
         <section className="course-info card">
-          <h2>MATH 101: Calculus I</h2>
-          <p className="instructor">Instructor: Dr. Jane Smith</p>
-          <p className="description">Introduction to differential and integral calculus.</p>
+          <h2>{courseData.name}</h2>
+          {courseData.image && (
+            <img src={courseData.image} alt={courseData.name} className="course-page-image" />
+          )}
+          <p className="instructor">Instructor: {courseData.instructor}</p>
+          <p className="description">{courseData.description}</p>
           <div className="progress-bar">
-            <div className="progress" style={{ width: '70%' }}></div>
+            <div className="progress" style={{width: `${courseData.progress}%`}}></div>
           </div>
-          <p className="progress-text">Progress: 70%</p>
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={handleFileUpload}
+          <p className="progress-text">Progress: {courseData.progress}%</p>
+          <input 
+            type="file" 
+            accept=".pdf" 
+            onChange={handleFileUpload} 
             ref={fileInputRef}
             style={{ display: 'none' }}
           />
@@ -170,12 +295,19 @@ const CoursePage: React.FC = () => {
           >
             Upload Homework
           </button>
-          {pdfText && (
-            <div className="pdf-text">
-              <h3>Extracted Text:</h3>
-              <pre>{pdfText}</pre>
+          {showQuizPopup && (
+            <div className="quiz-popup">
+              <p>Do you want to take the quiz now?</p>
+              <button onClick={handleTakeQuiz}>Yes</button>
+              <button onClick={handleSkipQuiz}>No</button>
             </div>
           )}
+          {quizButtonVisible && (
+            <button className="take-quiz-btn" onClick={() => navigate('/quiz')}>
+              Take Quiz
+            </button>
+          )}
+          
         </section>
 
         <section className="quizzes card">
@@ -224,6 +356,7 @@ const CoursePage: React.FC = () => {
           <p className="group-info">15 members • Last active 2 hours ago</p>
           <button className="join-btn">Join Group</button>
         </section>
+
       </main>
     </div>
   );
