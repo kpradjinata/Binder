@@ -35,6 +35,8 @@ const CourseCard: React.FC<Course & { loaded: boolean }> = ({ name, instructor, 
   );
 };
 
+
+
 const CourseOverview: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
