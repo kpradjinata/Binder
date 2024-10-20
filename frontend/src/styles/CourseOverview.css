@@ -29,7 +29,9 @@
   opacity: 0;
   transform: translateY(20px);
   animation: fadeIn 0.5s ease-out forwards;
-
+  height: calc(50vh - 100px);
+  display: flex;
+  flex-direction: column;
 }
 
 .course-card:hover {
@@ -37,32 +39,36 @@
 }
 
 .course-image {
-  height: 120px;
+  height: 60%; /* Increased from 50% to 60% */
   background-size: cover;
   background-position: center;
 }
 
 .course-content {
-  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px; /* Slightly reduced padding */
 }
 
 .course-title {
-  margin: 0 0 5px 0;
-  font-size: 18px;
+  margin: 0 0 2px 0;
+  font-size: 15px; /* Slightly reduced font size */
   font-weight: 600;
   color: #333;
 }
 
 .instructor-name {
-  margin: 0 0 10px 0;
+  margin: 0 0 4px 0;
   color: #666;
-  font-size: 14px;
+  font-size: 11px; /* Slightly reduced font size */
 }
 
 .progress-bar {
-  height: 5px;
+  height: 3px; /* Slightly reduced height */
   background-color: #e0e0e0;
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
@@ -73,8 +79,8 @@
 .progress-info {
   display: flex;
   justify-content: space-between;
-  margin-top: 5px;
-  font-size: 12px;
+  margin-top: 2px; /* Reduced top margin */
+  font-size: 9px; /* Reduced font size */
   color: #666;
 }
 
@@ -119,17 +125,14 @@
 }
 
 .add-course-button:hover {
-  background-color: #2ecc71;
+  background-color: #27ae60;
 }
 
 .add-course-button-container {
   display: flex;
   align-items: center;
-  /* Vertically align buttons */
   justify-content: flex-start;
-  /* Aligns buttons from the left */
   gap: 10px;
-  /* Space between the buttons */
 }
 
 .quiz-popup {
@@ -153,32 +156,6 @@
   margin-bottom: 20px;
 }
 
-.course-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  transition: transform 0.3s ease-in-out;
-}
-
-.course-card {
-  /* ... existing styles ... */
-  height: calc(50vh - 100px); /* Adjust this value to fit your layout */
-  display: flex;
-  flex-direction: column;
-}
-
-.course-image {
-  height: 40%;
-  background-size: cover;
-  background-position: center;
-}
-
-.course-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 .quiz-popup button {
   margin: 0 10px;
   padding: 12px 20px;
@@ -191,7 +168,7 @@
 }
 
 .quiz-popup button:first-child {
-  background-color: green;
+  background-color: #4CAF50;
   color: white;
 }
 
@@ -200,21 +177,22 @@
 }
 
 .quiz-popup button:last-child {
-  background-color: red;
-  color: #333;
+  background-color: #f44336;
+  color: white;
 }
 
 .quiz-popup button:last-child:hover {
-  background-color: #e24a4a;
+  background-color: #e53935;
 }
 
 .take-quiz-btn {
   background-color: #4CAF50;
   color: white;
-  padding: 10px 20px;
+  padding: 6px 12px; /* Slightly reduced padding */
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 11px; /* Slightly reduced font size */
 }
 
 .take-quiz-btn:hover {

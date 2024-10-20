@@ -21,7 +21,7 @@ const CoursePage: React.FC = () => {
   const [pdfText, setPdfText] = useState('');
   const [courseData, setCourseData] = useState<CourseData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [englishImage, setEnglishImage] = useState<string>("/english.jpg");
+  const [englishImage, setEnglishImage] = useState<string>("/engliskh.jpg");
   const [showQuizPopup, setShowQuizPopup] = useState(false);
   const [quizButtonVisible, setQuizButtonVisible] = useState(false);
   const navigate = useNavigate();
@@ -45,7 +45,6 @@ const pastQuizzes = [
           instructor: 'Alphonso Thompson',
           description: 'Comprehensive English language and literature course.',
           progress: 77,
-          image: englishImage
         },
         'math': {
           name: 'Math',
