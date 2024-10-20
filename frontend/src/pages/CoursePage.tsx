@@ -56,6 +56,24 @@ const CoursePage: React.FC = () => {
           description: 'In-depth study of world history.',
           progress: 0
         },
+        'physics': {
+          name: 'Physics-121',
+          instructor: 'Dr. Einstein',
+          description: 'Study of Waves and Electromagnetism',
+          progress: 85
+        },
+        'chemistry': {
+          name: 'Chem-113',
+          instructor: 'Prof Curie',
+          description: 'Advanced Mechanistic Organic Chemsitry',
+          progress: 62
+        },
+        'computer-science': {
+          name: 'CS-170',
+          instructor: 'Dr. Turing',
+          description: 'Efficient Algorithms',
+          progress: 90
+        }
       };
 
       const data = mockCourseData[courseName || ''] || null;
