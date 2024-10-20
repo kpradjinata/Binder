@@ -6,8 +6,8 @@ import PDFToText  from 'react-pdftotext';
 
 const CoursePage: React.FC = () => {
   const { courseName } = useParams<{ courseName: string }>();
-  const [subject, setSubject] = useState('');
-  const [courseNumber, setCourseNumber] = useState('');
+  // const [subject, setSubject] = useState('');
+  // const [courseNumber, setCourseNumber] = useState('');
   const [activeTab, setActiveTab] = useState('upcoming');
   const [pdfText, setPdfText] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -22,10 +22,10 @@ const CoursePage: React.FC = () => {
     { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
   ];
 
-  const handleAddCourse = () => {
-    console.log(`Adding course: ${subject} ${courseNumber}`);
-    // Implement course addition logic here
-  };
+  // const handleAddCourse = () => {
+  //   console.log(`Adding course: ${subject} ${courseNumber}`);
+  //   // Implement course addition logic here
+  // };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -50,7 +50,7 @@ const CoursePage: React.FC = () => {
       <main className="course-main-content">
         <h1 className="page-title">{courseName}</h1>
         
-        <section className="add-course card">
+        {/* <section className="add-course card">
           <h2>Add Course</h2>
           <input
             type="text"
@@ -65,7 +65,7 @@ const CoursePage: React.FC = () => {
             onChange={(e) => setCourseNumber(e.target.value)}
           />
           <button onClick={handleAddCourse}>Add Course</button>
-        </section>
+        </section> */}
         
         <section className="course-info card">
           <h2>MATH 101: Calculus I</h2>
