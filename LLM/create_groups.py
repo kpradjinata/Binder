@@ -182,6 +182,7 @@ def complementary_score(group, people):
 @app.route('/group_students', methods=['POST'])
 def group_students():
     data = request.json
+    print(len(data))
     if not isinstance(data, list) or len(data) != 3:
         return jsonify({"error": "Invalid JSON data. Expected a list of three elements."}), 400
 

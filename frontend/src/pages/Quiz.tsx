@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import QuizQuestion from '../components/QuizQuestion';
 import '../styles/Quiz.css';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
-import { useEffect, useRef } from 'react';
-import { useMutation } from 'convex/react';
-
 
 interface QuizData {
   questions: string[];
@@ -20,40 +18,12 @@ const letterToIndexMap = new Map<string, number>([
   ['D', 3]
 ]);
 
-const quizData: QuizData = {
-  questions: [
-    "What is 5 + 3?",
-    "What is the square root of 16?",
-    "Solve for x: 2x + 3 = 7",
-    "What is the value of π (Pi) rounded to two decimal places?",
-    "What is 9 * 6?",
-    "What is the derivative of x^2?",
-    "What is the value of cos(0)?",
-    "What is 15 % 4 (15 modulo 4)?",
-    "What is the sum of angles in a triangle?",
-    "What is the area of a circle with radius 3?"
-  ],
-  answerOptions: [
-    ["6", "7", "8", "9"],
-    ["2", "3", "4", "5"],
-    ["x = 1", "x = 2", "x = 3", "x = 4"],
-    ["3.12", "3.14", "3.16", "3.18"],
-    ["42", "48", "54", "56"],
-    ["x", "2x", "2", "x^2"],
-    ["0", "1", "-1", "undefined"],
-    ["1", "2", "3", "4"],
-    ["90 degrees", "180 degrees", "270 degrees", "360 degrees"],
-    ["9π", "12π", "18π", "36π"]
-  ],
-  answers: ["8", "4", "x = 2", "3.14", "54", "2x", "1", "3", "180 degrees", "9π"]
-};
-
 const Quiz: React.FC = () => {
+  const navigate = useNavigate();
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [groupsGenerated, setGroupsGenerated] = useState(false);
   const [quizData, setQuizData] = useState<QuizData | null>(null);
-  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(quizData?.questions.length || 0).fill(''));
-
-  const quizDataRef = useRef<QuizData | null>(null);
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
 
   const fetchedQuiz: QuizData | undefined | null = useQuery(api.quizzes.getMostRecentQuiz);
 
@@ -61,20 +31,19 @@ const Quiz: React.FC = () => {
   const createStudentQuizResSecond = useMutation(api.student_quiz_res.createStudentQuizResSecond);
   const createStudentQuizResThird = useMutation(api.student_quiz_res.createStudentQuizResThird);
 
+  const createGroup = useMutation(api.groups.createGroup);
+  const addMemberToGroup = useMutation(api.groups.addMemberToGroup);
+
+  const studentQuizResFirst = useQuery(api.student_quiz_res.getAllStudentQuizResFirst);
+  const studentQuizResSecond = useQuery(api.student_quiz_res.getAllStudentQuizResSecond);
+  const studentQuizResThird = useQuery(api.student_quiz_res.getAllStudentQuizResThird);
+
   useEffect(() => {
-    if (fetchedQuiz && !quizDataRef.current) {
-      quizDataRef.current = fetchedQuiz;
+    if (fetchedQuiz) {
       setQuizData(fetchedQuiz);
-      console.log("Quiz data set:", fetchedQuiz);
-      // Initialize userAnswers here if needed
       setUserAnswers(new Array(fetchedQuiz.questions?.length || 0).fill(''));
     }
   }, [fetchedQuiz]);
-
-
-  // const quizzes = useQuery(api.quizzes.getMostRecentQuiz);
-  // console.log(quizzes?.questions);
-
 
   const handleAnswerSelect = (questionIndex: number, answer: string) => {
     const newAnswers = [...userAnswers];
@@ -95,59 +64,113 @@ const Quiz: React.FC = () => {
     }
 
     setQuizSubmitted(true);
+    calculateScore();
+    generateGroups();
+
+    // Navigate to dashboard after a short delay
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 3000); // 3 second delay, adjust as needed
   };
 
+  const generateGroups = () => {
+    fetch('http://localhost:5001/group_students', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([
+        studentQuizResFirst,
+        studentQuizResSecond,
+        studentQuizResThird,
+      ])
+    }).then(res => res.json()).then(data => {
+      console.log('Received data:', data);
+
+      // Create all groups first
+      const groupPromises = data.map(group =>
+        createGroup({ groupNumber: group.group_number })
+      );
+
+      // Wait for all groups to be created
+      Promise.all(groupPromises).then(groupIds => {
+        // Now add members to groups
+        const memberPromises = data.flatMap((group, index) =>
+          group.members.map(member =>
+            addMemberToGroup({
+              groupId: groupIds[index],
+              name: member.name,
+              skills: member.skills
+            })
+          )
+        );
+
+        // Wait for all members to be added
+        return Promise.all(memberPromises);
+      }).then(() => {
+        console.log('All groups and members added');
+        setGroupsGenerated(true);
+      }).catch(error => {
+        console.error('Error creating groups or adding members:', error);
+      });
+    });
+  }
 
   const calculateScore = () => {
     let correctAnswers = 0;
     userAnswers.forEach((answer, index) => {
-      console.log(quizData?.answers[index], answer);
-
-      if (answer === quizData?.answerOptions[index][letterToIndexMap.get(quizData?.answers[index]) ?? 0]) {
-        if (0 <= index && index <= 2) {
-          createStudentQuizResFirst({
-            questionIndex: index,
-            isCorrect: 1,
-          });
-        } else if (3 <= index && index <= 5) {
-          createStudentQuizResSecond({
-            questionIndex: index,
-            isCorrect: 1,
-          });
+      if (quizData && quizData.answerOptions[index] && quizData.answers[index]) {
+        if (answer === quizData.answerOptions[index][letterToIndexMap.get(quizData.answers[index]) ?? 0]) {
+          if (0 <= index && index <= 2) {
+            createStudentQuizResFirst({
+              questionIndex: index,
+              isCorrect: 1,
+            });
+          } else if (3 <= index && index <= 5) {
+            createStudentQuizResSecond({
+              questionIndex: index,
+              isCorrect: 1,
+            });
+          } else {
+            createStudentQuizResThird({
+              questionIndex: index,
+              isCorrect: 1,
+            });
+          }
+          correctAnswers++;
         } else {
-          createStudentQuizResThird({
-            questionIndex: index,
-            isCorrect: 1,
-          });
-        }
-        correctAnswers++;
-      }
-      else {
-        if (0 <= index && index <= 2) {
-          createStudentQuizResFirst({
-            questionIndex: index,
-            isCorrect: 0,
-          });
-        } else if (3 <= index && index <= 5) {
-          createStudentQuizResSecond({
-            questionIndex: index,
-            isCorrect: 0,
-          });
-        } else {
-          createStudentQuizResThird({
-            questionIndex: index,
-            isCorrect: 0,
-          });
+          if (0 <= index && index <= 2) {
+            createStudentQuizResFirst({
+              questionIndex: index,
+              isCorrect: 0,
+            });
+          } else if (3 <= index && index <= 5) {
+            createStudentQuizResSecond({
+              questionIndex: index,
+              isCorrect: 0,
+            });
+          } else {
+            createStudentQuizResThird({
+              questionIndex: index,
+              isCorrect: 0,
+            });
+          }
         }
       }
     });
     return `${correctAnswers}/${quizData?.questions.length}`;
   };
 
+  const handleExit = () => {
+    const confirmExit = window.confirm("Are you sure you want to exit the quiz? Your progress will be lost.");
+    if (confirmExit) {
+      navigate('/dashboard');
+    }
+  };
 
   return (
     <div className="quiz-container">
-      <h2>Quiz (Number)</h2>
+      <h2>Quiz</h2>
       {quizData?.questions.map((question, index) => (
         <QuizQuestion
           key={index}
@@ -167,8 +190,18 @@ const Quiz: React.FC = () => {
         <div className="quiz-results">
           <h3>Quiz Completed!</h3>
           <p>Your score: {calculateScore()}</p>
+          {groupsGenerated ? (
+            <p>Groups have been generated based on your results.</p>
+          ) : (
+            <p>Generating groups based on your results...</p>
+          )}
         </div>
       )}
+
+      {/* New Exit button */}
+      <button className="exit-button" onClick={handleExit}>
+        Exit to Dashboard
+      </button>
     </div>
   );
 };

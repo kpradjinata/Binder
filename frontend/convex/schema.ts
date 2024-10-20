@@ -33,11 +33,14 @@ export default defineSchema({
         answers: v.array(v.string()),
     }).index('by_subject_number', ['subject', 'courseNumber']),
     groups: defineTable({
-        subject: v.string(),
-        courseNumber: v.string(),
+        groupNumber: v.number(),
+    }).index('by_groupNumber', ['groupNumber']),
+    groupMembers: defineTable({
+        groupId: v.id("groups"),
         name: v.string(),
-        students: v.array(v.string()),
-    }).index('by_subject_number', ['subject', 'courseNumber']),
+        skills: v.array(v.number()),
+    }).index("by_group", ["groupId"])
+        .index("by_name", ["name"]),
     homeworks: defineTable({
         subject: v.string(),
         courseNumber: v.string(),

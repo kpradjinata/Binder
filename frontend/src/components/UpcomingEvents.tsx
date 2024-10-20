@@ -14,9 +14,9 @@ const UpcomingEvents: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const events: Event[] = [
+    { date: 'SEPT 13', title: 'English Essay Peer Review', color: '#E8F5E9', description: 'Thesis Statement Evaluation and Argument Development', year: 2024 },
     { date: 'OCT 19', title: 'Physics Waves and Electromagnetism Study Session', color: '#E0F2F1', description: 'Wave Properties and Electric Fields', year: 2024 },
     { date: 'OCT 24', title: 'CS-170 Efficient Algorithms Zoom Study Meet Up', color: '#FCE4EC', description: 'Algorithm Design Paradigms, Complexity Analysis, and Graph Algorithms', year: 2024 },
-    { date: 'SEPT 13', title: 'English Essay Peer Review', color: '#E8F5E9', description: 'Thesis Statement Evaluation and Argument Development', year: 2024 },
   ];
 
   const createGoogleCalendarUrl = (event: Event) => {
@@ -59,8 +59,8 @@ const UpcomingEvents: React.FC = () => {
           </div>
           <div className="event-details">
             <div className="event-title">{event.title}</div>
-            <button 
-              className="add-to-calendar" 
+            <button
+              className="add-to-calendar"
               onClick={(e) => handleAddToCalendar(e, event)}
             >
               Add to Calendar

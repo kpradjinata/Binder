@@ -26,15 +26,16 @@ const CoursePage: React.FC = () => {
   const [quizButtonVisible, setQuizButtonVisible] = useState(false);
   const navigate = useNavigate();
 
-const upcomingQuizzes = [
-  { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
-  { id: 2, name: 'Chapter 5 Quiz', date: 'Oct 22, 2024' },
-];
 
-const pastQuizzes = [
-  { id: 1, name: 'Chapter 3 Quiz', date: 'Sept 30, 2024', score: '85%' },
-  { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
-];
+  const upcomingQuizzes = [
+    { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
+    { id: 2, name: 'Chapter 5 Quiz', date: 'Oct 22, 2024' },
+  ];
+
+  const pastQuizzes = [
+    { id: 1, name: 'Chapter 3 Quiz', date: 'Sept 30, 2024', score: '85%' },
+    { id: 2, name: 'Pop Quiz', date: 'Oct 5, 2024', score: '92%' },
+  ];
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -46,6 +47,56 @@ const pastQuizzes = [
           description: 'Comprehensive English language and literature course.',
           progress: 77,
           image: englishImage
+        },
+        'math': {
+          name: 'Math',
+          instructor: 'Prof.Oakland',
+          description: 'Advanced mathematics covering algebra, calculus, and more.',
+          progress: 96
+        },
+        'hist-107': {
+          name: 'HIST-107',
+          instructor: 'Prof. Falck',
+          description: 'In-depth study of world history.',
+          progress: 0
+        },
+        'physics': {
+          name: 'Physics-121',
+          instructor: 'Prof. Einstein',
+          description: 'Study of Waves and Electromagnetism',
+          progress: 85
+        },
+        'chemistry': {
+          name: 'Chem-113',
+          instructor: 'Prof. Curie',
+          description: 'Advanced Mechanistic Organic Chemsitry',
+          progress: 62
+        },
+        'computer-science': {
+          name: 'CS-170',
+          instructor: 'Prof. Turing',
+          description: 'Efficient Algorithms',
+          progress: 90
+        }
+      };
+
+      const data = mockCourseData[courseName || ''] || null;
+      setCourseData(data);
+    };
+
+    fetchCourseData();
+  }, [courseName, englishImage]);
+
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
+      // const data = mockCourseData[urlFriendlyName || ''] || null;
+      const mockCourseData: Record<string, CourseData> = {
+        'english': {
+          name: 'English',
+          instructor: 'Alphonso Thompson',
+          description: 'Comprehensive English language and literature course.',
+          progress: 77
         },
         'math': {
           name: 'Math',
@@ -79,62 +130,14 @@ const pastQuizzes = [
         }
       };
 
+      // Get the course data based on the URL parameter
       const data = mockCourseData[courseName || ''] || null;
       setCourseData(data);
     };
 
     fetchCourseData();
-  }, [courseName, englishImage]);
-useEffect(() => {
-  const fetchCourseData = async () => {
-    const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
-    // const data = mockCourseData[urlFriendlyName || ''] || null;
-    const mockCourseData: Record<string, CourseData> = {
-      'english': {
-        name: 'English',
-        instructor: 'Alphonso Thompson',
-        description: 'Comprehensive English language and literature course.',
-        progress: 77
-      },
-      'math': {
-        name: 'Math',
-        instructor: 'Oakland',
-        description: 'Advanced mathematics covering algebra, calculus, and more.',
-        progress: 96
-      },
-      'hist-107': {
-        name: 'HIST-107',
-        instructor: 'Mr. Falck',
-        description: 'In-depth study of world history.',
-        progress: 0
-      },
-      'physics': {
-        name: 'Physics-121',
-        instructor: 'Dr. Einstein',
-        description: 'Study of Waves and Electromagnetism',
-        progress: 85
-      },
-      'chemistry': {
-        name: 'Chem-113',
-        instructor: 'Prof Curie',
-        description: 'Advanced Mechanistic Organic Chemsitry',
-        progress: 62
-      },
-      'computer-science': {
-        name: 'CS-170',
-        instructor: 'Dr. Turing',
-        description: 'Efficient Algorithms',
-        progress: 90
-      }
-    };
+  }, [courseName]);
 
-    // Get the course data based on the URL parameter
-    const data = mockCourseData[courseName || ''] || null;
-    setCourseData(data);
-  };
-
-  const createHomework = useMutation(api.homeworks.createHomework);
-  const createQuiz = useMutation(api.quizzes.createQuiz);
   const getAllStudentQuizResFirst = useQuery(api.student_quiz_res.getAllStudentQuizResFirst);
   const getAllStudentQuizResSecond = useQuery(api.student_quiz_res.getAllStudentQuizResSecond);
   const getAllStudentQuizResThird = useQuery(api.student_quiz_res.getAllStudentQuizResThird);
@@ -143,37 +146,37 @@ useEffect(() => {
   // Create a post request to group students based on quiz results
   console.log(getAllStudentQuizResFirst);
 
-  useEffect(() => {
-    if (getAllStudentQuizResFirst && getAllStudentQuizResSecond && getAllStudentQuizResThird) {
-      fetch("http://localhost:5001/group_students", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify([
-          getAllStudentQuizResFirst,
-          getAllStudentQuizResSecond,
-          getAllStudentQuizResThird
-        ]),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Grouped students:", data);
-        })
-        .catch((error) => {
-          console.error("Error grouping students:", error);
-        });
-    }
-  }, [getAllStudentQuizResFirst, getAllStudentQuizResSecond, getAllStudentQuizResThird]);
+  // useEffect(() => {
+  //   if (getAllStudentQuizResFirst && getAllStudentQuizResSecond && getAllStudentQuizResThird) {
+  //     fetch("http://localhost:5001/group_students", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify([
+  //         getAllStudentQuizResFirst,
+  //         getAllStudentQuizResSecond,
+  //         getAllStudentQuizResThird
+  //       ]),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         console.log("Grouped students:", data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error grouping students:", error);
+  //       });
+  //   }
+  // }, [getAllStudentQuizResFirst, getAllStudentQuizResSecond, getAllStudentQuizResThird]);
 
 
-  console.log(getAllStudentQuizResFirst);
-  fetchCourseData();
-}, [courseName]);
+  //   console.log(getAllStudentQuizResFirst);
+  //   fetchCourseData();
+  // }, [courseName]);
 
-const createHomework = useMutation(api.homeworks.createHomework);
-const createQuiz = useMutation(api.quizzes.createQuiz);
-const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const createHomework = useMutation(api.homeworks.createHomework);
+  const createQuiz = useMutation(api.quizzes.createQuiz);
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'application/pdf') {
       try {
@@ -241,7 +244,7 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     <div className="course-page">
       <Sidebar />
       <main className="course-main-content">
-        <h1 className="page-title">{courseName}</h1>
+        {/* <h1 className="page-title">{courseName}</h1> */}
 
         {/* <section className="add-course card"> */}
 
@@ -278,13 +281,13 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
           <p className="instructor">Instructor: {courseData.instructor}</p>
           <p className="description">{courseData.description}</p>
           <div className="progress-bar">
-            <div className="progress" style={{width: `${courseData.progress}%`}}></div>
+            <div className="progress" style={{ width: `${courseData.progress}%` }}></div>
           </div>
           <p className="progress-text">Progress: {courseData.progress}%</p>
-          <input 
-            type="file" 
-            accept=".pdf" 
-            onChange={handleFileUpload} 
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={handleFileUpload}
             ref={fileInputRef}
             style={{ display: 'none' }}
           />
@@ -306,7 +309,7 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
               Take Quiz
             </button>
           )}
-          
+
         </section>
 
         <section className="quizzes card">

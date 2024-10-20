@@ -17,6 +17,7 @@ import type {
 } from "convex/server";
 import type * as courses from "../courses.js";
 import type * as discussions from "../discussions.js";
+import type * as groups from "../groups.js";
 import type * as homeworks from "../homeworks.js";
 import type * as quizzes from "../quizzes.js";
 import type * as student_quiz_res from "../student_quiz_res.js";
@@ -35,6 +36,7 @@ import type * as tasks from "../tasks.js";
 declare const fullApi: ApiFromModules<{
   courses: typeof courses;
   discussions: typeof discussions;
+  groups: typeof groups;
   homeworks: typeof homeworks;
   quizzes: typeof quizzes;
   student_quiz_res: typeof student_quiz_res;

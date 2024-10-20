@@ -41,12 +41,12 @@ const CourseOverview: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
   const [courses, setCourses] = useState<Course[]>([
-    { name: 'English', instructor: 'Alphonso Thompson', progress: 77, image: '/english.jpg' },
-    { name: 'Math', instructor: 'Oakland', progress: 96, image: '/math.png' },
-    { name: 'HIST-107', instructor: 'Mr. Falck', progress: 0, image: '/history.png' },
-    { name: 'Physics', instructor: 'Dr. Einstein', progress: 85, image: '/physics.webp' },
+    { name: 'English', instructor: 'Prof. Alphonso Thompson', progress: 77, image: '/english.jpg' },
+    { name: 'Math', instructor: 'Prof. Oakland', progress: 96, image: '/math.png' },
+    { name: 'HIST-107', instructor: 'Prof. Falck', progress: 0, image: '/history.png' },
+    { name: 'Physics', instructor: 'Prof. Einstein', progress: 85, image: '/physics.webp' },
     { name: 'Chemistry', instructor: 'Prof. Curie', progress: 62, image: '/chemistry.jpeg' },
-    { name: 'Computer Science', instructor: 'Dr. Turing', progress: 90, image: '/cs.jpeg' }
+    { name: 'Computer Science', instructor: 'Prof. Turing', progress: 90, image: '/cs.jpeg' }
   ]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
@@ -90,10 +90,10 @@ const CourseOverview: React.FC = () => {
     const timer = setTimeout(() => {
       setCardsLoaded(true);
     }, 100);
-  
+
     return () => clearTimeout(timer);
   }, []);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setSlideDirection(null);
@@ -106,16 +106,16 @@ const CourseOverview: React.FC = () => {
     currentPage * coursesPerPage,
     (currentPage + 1) * coursesPerPage
   );
-  
+
   return (
     <div className="course-overview-container">
       <h2 className="overview-title">Daily Overview</h2>
       <div className={`course-grid ${slideDirection ? `slide-${slideDirection}` : ''}`}>
-      {displayedCourses.map((course, index) => (
-    <CourseCard 
-      key={`${currentPage}-${index}`} 
-      {...course} 
-      loaded={cardsLoaded} />
+        {displayedCourses.map((course, index) => (
+          <CourseCard
+            key={`${currentPage}-${index}`}
+            {...course}
+            loaded={cardsLoaded} />
         ))}
       </div>
       <div className="navigation-container">
