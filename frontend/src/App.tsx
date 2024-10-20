@@ -14,7 +14,6 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-
         <Route path="/discussion" element={<Discussion />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/groups" element={<Groups />} />

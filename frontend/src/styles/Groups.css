@@ -148,3 +148,80 @@ button:hover {
   font-size: 14px;
   color: #6b6b6b;
 }
+.recommendations ul li {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.recommendations ul li:hover {
+  background-color: #f0f0f0;
+}
+
+.recommendations ul li.selected {
+  background-color: #e6f7ff;
+  font-weight: bold;
+}
+
+.group-scheduler-section {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.group-scheduler-section h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.integration-buttons {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.integration-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.google-btn {
+  background-color: #4285F4;
+  color: #FFFFFF;
+}
+
+.google-btn:hover {
+  background-color: #357AE8;
+}
+
+.zoom-btn {
+  background-color: #2D8CFF;
+  color: #FFFFFF;
+}
+
+.zoom-btn:hover {
+  background-color: #2681F2;
+}
+
+.post-meeting-quiz {
+  background-color: #e9ecef;
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.post-meeting-quiz h3 {
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.post-meeting-quiz p {
+  color: #6c757d;
+  margin: 0;
+}
