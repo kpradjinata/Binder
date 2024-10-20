@@ -1,49 +1,23 @@
+#Test for grouping and skill mastery
+
 import requests
-import json
-import random
 
-# The URL of your Flask API for grouping students
-url = 'http://localhost:8080/group_students'
+url = 'http://localhost:5001/group_students'
+files = {
+    'skill1': open('skill1.csv', 'rb'),
+    'skill2': open('skill2.csv', 'rb'),
+    'skill3': open('skill3.csv', 'rb')
+}
 
-# Function to generate sample data
-def generate_sample_data(num_students=20):
-    people = {}
-    for i in range(1, num_students + 1):
-        # Generate 3 random skill scores between 0 and 1 for each student
-        skills = [round(random.random(), 2) for _ in range(3)]
-        people[f"Student_{i}"] = skills
-    return people
-
-# Generate sample data
-sample_data = generate_sample_data()
-
-# Prepare the payload
-payload = {"people": sample_data}
-
-# Send POST request to the API
-try:
-    response = requests.post(url, json=payload)
-    
-    # Check if the request was successful
-    if response.status_code == 200:
-        # Parse the JSON response
-        result = response.json()
-        groups = result['groups']
-        
-        print("Groups formed:")
-        for group in groups:
-            print(f"\nGroup {group['group_number']}:")
-            for member in group['members']:
-                print(f"  {member['name']}: {member['skills']}")
-    else:
-        print(f"Error: Received status code {response.status_code}")
-        print(response.text)
-
-except requests.exceptions.RequestException as e:
+response = requests.post(url, files=files)
+if response.status_code == 200:
+    grouped_students = response.json()
+    print(grouped_students)
+else:
+    print(f"Error: {response.status_code}, {response.text}")
 
 
 #testing generate categories
-
     '''
 import requests
 import json

@@ -1,8 +1,24 @@
-from flask import Flask, jsonify, request
+import pandas as pd
 import numpy as np
+from pyBKT.models import Model
 from itertools import combinations
+from flask import Flask, request, jsonify
+import io
 
 app = Flask(__name__)
+
+def process_skill_csv(file):
+    data = pd.read_csv(file)
+    model = Model()
+    model.fit(data=data)
+    predictions = model.predict(data=data)
+    return predictions
+
+def analyze_mastery(predictions, mastery_threshold=0.8):
+    latest_predictions = predictions.groupby(['user_id', 'skill_name']).last().reset_index()
+    latest_predictions['mastered'] = latest_predictions['correct'] >= mastery_threshold
+    student_mastery = latest_predictions.groupby('user_id')['correct'].mean()
+    return student_mastery
 
 def complementary_score(group, people):
     skills = np.array([people[name] for name in group])
@@ -10,16 +26,27 @@ def complementary_score(group, people):
 
 @app.route('/group_students', methods=['POST'])
 def group_students():
-    data = request.json
-    people = data['people']
+    if 'skill1' not in request.files or 'skill2' not in request.files or 'skill3' not in request.files:
+        return jsonify({"error": "Missing one or more skill CSV files"}), 400
 
-    # Generate all possible groups of 4
+    skill_files = [request.files['skill1'], request.files['skill2'], request.files['skill3']]
+    skills = [{} for _ in range(3)]
+
+    for i, file in enumerate(skill_files):
+        predictions = process_skill_csv(file)
+        student_mastery = analyze_mastery(predictions)
+        
+        for student in predictions['user_id'].unique():
+            skills[i][student] = student_mastery[student]
+
+    people = {
+        name: [skills[0][name], skills[1][name], skills[2][name]]
+        for name in skills[0].keys()
+    }
+
     all_groups = list(combinations(people.keys(), 4))
-
-    # Sort groups by their complementary score (higher is better)
     sorted_groups = sorted(all_groups, key=lambda g: complementary_score(g, people), reverse=True)
 
-    # Select the top non-overlapping groups
     final_groups = []
     used_people = set()
 
@@ -30,7 +57,6 @@ def group_students():
             if len(used_people) >= len(people) - 3:
                 break
 
-    # Distribute remaining people
     remaining_people = list(set(people.keys()) - used_people)
 
     if len(remaining_people) == 1:
@@ -41,16 +67,15 @@ def group_students():
             best_group = max(final_groups, key=lambda g: complementary_score(g + [person], people))
             best_group.append(person)
 
-    # Format the groups for JSON response
-    formatted_groups = [
-        {
+    result = []
+    for i, group in enumerate(final_groups, 1):
+        group_data = {
             "group_number": i,
             "members": [{"name": person, "skills": people[person]} for person in group]
         }
-        for i, group in enumerate(final_groups, 1)
-    ]
+        result.append(group_data)
 
-    return jsonify({"groups": formatted_groups})
+    return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port = 5001)
