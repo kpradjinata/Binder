@@ -52,7 +52,7 @@ const Groups: React.FC = () => {
   const myGroups = [
     { 
       name: "Math 101", 
-      members: 5, 
+      members: 105, 
       lastActive: "2 hours ago",
       description: "A study group for Math 101 students",
       discussions: ["Upcoming midterm prep", "Homework help for Chapter 5"],
@@ -60,7 +60,7 @@ const Groups: React.FC = () => {
     },
     { 
       name: "History Buffs", 
-      members: 8, 
+      members: 228, 
       lastActive: "1 day ago",
       description: "Discussing historical events and their impact",
       discussions: ["Ancient Rome documentary review", "Planning for museum visit"],
@@ -68,7 +68,7 @@ const Groups: React.FC = () => {
     },
     { 
       name: "Econ Team", 
-      members: 4, 
+      members: 54, 
       lastActive: "3 days ago",
       description: "Collaborative group for Economics projects",
       discussions: ["Market analysis project", "Macroeconomics study session"],
