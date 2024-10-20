@@ -35,6 +35,7 @@ export default defineSchema({
     }).index('by_student_course', ['studentId', 'courseId']),
     quizzes: defineTable({
         id: v.string(),
+        courseId: v.string(),
         name: v.string(),
         description: v.string(),
         questions: v.array(v.string()),
@@ -52,7 +53,7 @@ export default defineSchema({
         id: v.string(),
         courseId: v.string(),
         name: v.string(),
-        questions: v.string(),
+        questions: v.array(v.string()),
         hints: v.array(v.string()),
     }).index('by_course_name', ['courseId', 'name']),
     discussions: defineTable({

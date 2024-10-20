@@ -27,7 +27,6 @@ function App() {
         <Route path="/Profile" element={<Profile />} />
         <Route path="/land" element={<LandingPage />} />
 
-        
       </Routes>
     </Router>
   );
