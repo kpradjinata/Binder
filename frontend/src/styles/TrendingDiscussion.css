@@ -1,22 +1,24 @@
 .trending-discussion-container {
   background-color: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .discussion-title {
   font-size: 16px;
   font-weight: 600;
   color: #333;
-  margin-top: 0;
-  margin-bottom: 15px;
+  margin: 0 0 12px 0;
+}
+
+.discussion-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .discussion-item {
-  padding: 10px 0;
   border-bottom: 1px solid #e0e0e0;
 }
 
@@ -24,22 +26,46 @@
   border-bottom: none;
 }
 
-.discussion-content {
-  flex-grow: 1;
+.discussion-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  padding: 12px 0;
+  transition: background-color 0.3s ease;
+}
+
+.discussion-link:hover {
+  background-color: #f5f5f5;
+}
+
+.discussion-text {
+  flex: 1;
   font-size: 14px;
-  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 8px;
 }
 
 .discussion-votes {
   background-color: #f0f0f0;
-  border-radius: 5px;
-  padding: 2px 5px;
+  border-radius: 12px;
+  padding: 2px 6px;
   font-size: 12px;
-  color: #333;
+  font-weight: 500;
+  color: #666;
+  min-width: 24px;
+  text-align: center;
 }
 
-.discussion-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+.view-all-link {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  color: #4a90e2;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
 }

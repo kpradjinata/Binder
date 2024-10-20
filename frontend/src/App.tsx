@@ -19,15 +19,14 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/discussion" element={<Discussion />} />
+        <Route path="/discussion/*" element={<Discussion />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/course/:courseName" element={<CoursePage />} />
         <Route path="/content-library" element={<ContentLibrary />} />
-        <Route path="/Profile" element={<Profile />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/analytics" element={<Analytics />} />
-
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
