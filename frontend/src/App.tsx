@@ -3,7 +3,7 @@ import Dashboard from './pages/Dashboard';
 import Groups from "./pages/Groups";
 import CoursePage from "./pages/CoursePage";
 import ContentLibrary from "./pages/ContentLibrary";
-
+import Analytics from "./pages/Analytics"
 import Profile from "./pages/Profile"
 import LandingPage from "./pages/LandingPage";
 
@@ -19,14 +19,14 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/discussion" element={<Discussion />} />
+        <Route path="/discussion/*" element={<Discussion />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/course/:courseName" element={<CoursePage />} />
         <Route path="/content-library" element={<ContentLibrary />} />
-        <Route path="/Profile" element={<Profile />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

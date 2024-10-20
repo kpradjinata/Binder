@@ -38,9 +38,10 @@ const CourseOverview: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
   const [courses, setCourses] = useState<Course[]>([
-    { name: 'English', instructor: 'Alphonso Thompson', progress: 77, image: '/path/to/english-image.jpg' },
-    { name: 'Math', instructor: 'Oakland', progress: 96, image: '/path/to/math-image.jpg' },
-    { name: 'HIST-107', instructor: 'Mr. Falck', progress: 0, image: '/path/to/history-image.jpg' },
+    { name: 'English', instructor: 'Alphonso Thompson', progress: 77, image: '/english.jpg' },
+    { name: 'Math', instructor: 'Oakland', progress: 96, image: '/math.png' },
+    { name: 'HIST-107', instructor: 'Mr. Falck', progress: 0, image: '/history.png' },
+    { name: 'Economics', instructor: 'Hoaly Flack', progress: 100, image: 'economics.png' },
     { name: 'Physics', instructor: 'Dr. Einstein', progress: 85, image: '/path/to/physics-image.jpg' },
     { name: 'Chemistry', instructor: 'Prof. Curie', progress: 62, image: '/path/to/chemistry-image.jpg' },
     { name: 'Computer Science', instructor: 'Dr. Turing', progress: 90, image: '/path/to/cs-image.jpg' }
@@ -93,7 +94,7 @@ const CourseOverview: React.FC = () => {
     currentPage * coursesPerPage,
     (currentPage + 1) * coursesPerPage
   );
-
+  
   return (
     <div className="course-overview-container">
       <h2 className="overview-title">Daily Overview</h2>
