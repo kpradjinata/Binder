@@ -5,7 +5,7 @@ import '../styles/Sidebar.css';
 
 const Sidebar: React.FC = () => {
   const menuItems = [
-    { name: 'Dashboard', icon: <DashboardIcon />, path: '/' },
+    { name: 'Dashboard', icon: <DashboardIcon />, path: '/Dashboard' },
     { name: 'Discussion', icon: <ReaderIcon/>, path: '/discussion' },
     { name: 'Groups', icon: <Share1Icon />, path: '/groups' },
     { name: 'Analytics', icon: <BarChartIcon />, path: '/analytics' },
