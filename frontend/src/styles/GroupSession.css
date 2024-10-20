@@ -1,21 +1,36 @@
 .group-session-card {
   background-color: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 3px;
+  padding: 16px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e0e0e0;
+  box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, 
+              rgba(15, 15, 15, 0.1) 0px 2px 4px;
+  transition: background 100ms ease-out 0s;
+}
+
+.group-session-card:hover {
+  background-color: rgba(55, 53, 47, 0.03);
 }
 
 .session-title {
   margin-top: 0;
-  font-size: 18px;
+  margin-bottom: 8px;
+  font-size: 14px;
   font-weight: 600;
-  color: #2e2e2e;
+  color: rgba(55, 53, 47, 0.65);
+  text-transform: uppercase;
 }
 
 .session-info {
   font-size: 14px;
-  color: #6b6b6b;
+  color: rgb(55, 53, 47);
 }
 
+.session-name {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.session-date {
+  color: rgba(55, 53, 47, 0.65);
+}
