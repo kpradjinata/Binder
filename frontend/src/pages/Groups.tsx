@@ -132,41 +132,51 @@ const Groups: React.FC = () => {
 
         <section className="group-scheduler-section">
           <h2>Group Study Session Scheduler</h2>
-          <div className="invite-users">
-            <h3>Invite Users</h3>
-            <div>
-              <input
-                type="text"
-                placeholder="Name"
-                value={newUserName}
-                onChange={(e) => setNewUserName(e.target.value)}
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                value={newUserEmail}
-                onChange={(e) => setNewUserEmail(e.target.value)}
-              />
-              <button onClick={handleAddUser}>Add User</button>
+          <div className="scheduler-content">
+            <div className="invite-users">
+              <h3>Invite Users</h3>
+              <div className="invite-form">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={newUserName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={newUserEmail}
+                  onChange={(e) => setNewUserEmail(e.target.value)}
+                />
+                <button onClick={handleAddUser}>Add User</button>
+              </div>
+              <div className="integration-buttons">
+                <button className="integration-btn google-btn" onClick={handleAddToGoogleCalendar}>
+                  Add to Google Calendar
+                </button>
+                <button className="integration-btn zoom-btn">
+                  Set up Zoom Meeting
+                </button>
+              </div>
             </div>
-            <ul>
-              {invitedUsers.map((user, index) => (
-                <li key={index}>
-                  {user.name} ({user.email})
-                  <button onClick={() => handleRemoveUser(user.email)}>Remove</button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="integration-buttons">
-            <button className="integration-btn google-btn" onClick={handleAddToGoogleCalendar}>
-              Add with Google Calendar
-            </button>
-            <button className="integration-btn zoom-btn">Set up Zoom Integration</button>
+            {invitedUsers.length > 0 && (
+              <div className="invited-users-list">
+                <h4>Invited Users</h4>
+                <ul>
+                  {invitedUsers.map((user, index) => (
+                    <li key={index}>
+                      <span>{user.name} ({user.email})</span>
+                      <button onClick={() => handleRemoveUser(user.email)}>Remove</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           <div className="post-meeting-quiz">
             <h3>Post-Meeting Quiz</h3>
             <p>Complete a quick quiz after your study session to track progress!</p>
+            <button className="quiz-btn">Start Quiz</button>
           </div>
         </section>
       </div>
