@@ -13,6 +13,7 @@
   justify-content: flex-start;
   overflow-y: auto; /* In case content overflows */
   box-sizing: border-box; /* Ensures padding is included in the width/height */
+  transition: transform 0.3s ease-in-out;
 }
 
 .menu-item {
@@ -24,6 +25,7 @@
   transition: background-color 0.3s;
   border-radius: 10px; /* Rounded corners for menu items */
   margin-bottom: 5px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .menu-item:hover, .menu-item.active {
@@ -37,4 +39,9 @@
 
 .menu-item-text {
   font-size: 16px;
+}
+
+.menu-item.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
