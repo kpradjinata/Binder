@@ -361,3 +361,38 @@ button:hover {
 .group-details-content ul {
   padding-left: 20px;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.group-finder-section,
+.my-groups-section,
+.group-scheduler-section {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.group-finder-section.fade-in,
+.my-groups-section.fade-in,
+.group-scheduler-section.fade-in {
+  opacity: 1;
+}
+.group-finder-section.fade-in {
+  animation: fadeIn 0.5s ease-out ;
+}
+
+.my-groups-section.fade-in {
+  animation: fadeIn 0.5s ease-out ;
+}
+
+.group-scheduler-section.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}

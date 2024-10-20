@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import GroupDetailsOverlay from '../components/GroupDetailsOverlay';
 import '../styles/Groups.css';
@@ -40,6 +40,8 @@ const Groups: React.FC = () => {
   const [invitedUsers, setInvitedUsers] = useState<User[]>([]);
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
+  const [contentLoaded, setContentLoaded] = useState(false);
+
 
   const [recommendedGroups, setRecommendedGroups] = useState([
     { id: 1, name: "Advanced Calculus Study Group", joined: false },
@@ -98,6 +100,16 @@ const Groups: React.FC = () => {
     }
   };
 
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContentLoaded(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleRemoveUser = (email: string) => {
     setInvitedUsers(invitedUsers.filter(user => user.email !== email));
   };
@@ -123,7 +135,8 @@ const Groups: React.FC = () => {
       <div className="group-main-content">
         <h1 className="page-title">Groups</h1>
         
-        <section className="group-finder-section">
+        <section className={`group-finder-section ${contentLoaded ? 'fade-in' : ''}`}>
+        
           <h2>Group Finder</h2>
           <div className="search-filter">
             <input type="text" placeholder="Search groups..." />
@@ -150,7 +163,7 @@ const Groups: React.FC = () => {
             </ul>
           </div>
         </section>
-        <section className="my-groups-section">
+        <section className={`my-groups-section ${contentLoaded ? 'fade-in' : ''}`}>
           <h2>My Groups</h2>
           <ul className="group-list">
             {myGroups.map((group, index) => (
@@ -165,7 +178,7 @@ const Groups: React.FC = () => {
           </ul>
         </section>
 
-        <section className="group-scheduler-section">
+        <section className={`group-scheduler-section ${contentLoaded ? 'fade-in' : ''}`}>
           <h2>Group Study Session Scheduler</h2>
           <div className="scheduler-content">
             <div className="invite-users">
