@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Sidebar from "../components/Sidebar";
 import '../styles/CoursePage.css';
 import { useParams } from 'react-router-dom';
+import PDFToText  from 'react-pdftotext';
 
 const CoursePage: React.FC = () => {
   const { courseName } = useParams<{ courseName: string }>();
   const [subject, setSubject] = useState('');
   const [courseNumber, setCourseNumber] = useState('');
   const [activeTab, setActiveTab] = useState('upcoming');
+  const [pdfText, setPdfText] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const upcomingQuizzes = [
     { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
@@ -23,6 +26,23 @@ const CoursePage: React.FC = () => {
     console.log(`Adding course: ${subject} ${courseNumber}`);
     // Implement course addition logic here
   };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file && file.type === 'application/pdf') {
+      try {
+        const text = await PDFToText(file);
+        setPdfText(text);
+        console.log('Extracted text:', text);
+      } catch (error) {
+        console.error('Error reading PDF:', error);
+        alert('Failed to read PDF file');
+      }
+    } else {
+      alert('Please upload a PDF file');
+    }
+  };
+
 
   return (
     <div className="course-page">
@@ -55,7 +75,25 @@ const CoursePage: React.FC = () => {
             <div className="progress" style={{width: '70%'}}></div>
           </div>
           <p className="progress-text">Progress: 70%</p>
-          <button className="upload-homework">Upload Homework</button>
+          <input 
+            type="file" 
+            accept=".pdf" 
+            onChange={handleFileUpload} 
+            ref={fileInputRef}
+            style={{display: 'none'}}
+          />
+          <button 
+            className="upload-homework" 
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Upload Homework
+          </button>
+          {pdfText && (
+            <div className="pdf-text">
+              <h3>Extracted Text:</h3>
+              <pre>{pdfText}</pre>
+            </div>
+          )}
         </section>
         
         <section className="quizzes card">
