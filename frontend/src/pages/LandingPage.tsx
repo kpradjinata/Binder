@@ -16,7 +16,7 @@ const LandingPage = () => {
   }, [controls, inView]);
 
   const handleGetStarted = () => {
-    navigate('/Dashboard');
+    navigate('/dashboard');
   };
 
   return (

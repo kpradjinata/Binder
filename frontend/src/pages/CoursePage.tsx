@@ -3,8 +3,8 @@ import Sidebar from "../components/Sidebar";
 import '../styles/CoursePage.css';
 import { useParams } from 'react-router-dom';
 import PDFToText from 'react-pdftotext';
-import { useMutation, useQuery } from 'convex/react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
 interface CourseData {
@@ -85,91 +85,6 @@ const pastQuizzes = [
 
     fetchCourseData();
   }, [courseName, englishImage]);
-useEffect(() => {
-  const fetchCourseData = async () => {
-    const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
-    // const data = mockCourseData[urlFriendlyName || ''] || null;
-    const mockCourseData: Record<string, CourseData> = {
-      'english': {
-        name: 'English',
-        instructor: 'Alphonso Thompson',
-        description: 'Comprehensive English language and literature course.',
-        progress: 77
-      },
-      'math': {
-        name: 'Math',
-        instructor: 'Oakland',
-        description: 'Advanced mathematics covering algebra, calculus, and more.',
-        progress: 96
-      },
-      'hist-107': {
-        name: 'HIST-107',
-        instructor: 'Mr. Falck',
-        description: 'In-depth study of world history.',
-        progress: 0
-      },
-      'physics': {
-        name: 'Physics-121',
-        instructor: 'Dr. Einstein',
-        description: 'Study of Waves and Electromagnetism',
-        progress: 85
-      },
-      'chemistry': {
-        name: 'Chem-113',
-        instructor: 'Prof Curie',
-        description: 'Advanced Mechanistic Organic Chemsitry',
-        progress: 62
-      },
-      'computer-science': {
-        name: 'CS-170',
-        instructor: 'Dr. Turing',
-        description: 'Efficient Algorithms',
-        progress: 90
-      }
-    };
-
-    // Get the course data based on the URL parameter
-    const data = mockCourseData[courseName || ''] || null;
-    setCourseData(data);
-  };
-
-  const createHomework = useMutation(api.homeworks.createHomework);
-  const createQuiz = useMutation(api.quizzes.createQuiz);
-  const getAllStudentQuizResFirst = useQuery(api.student_quiz_res.getAllStudentQuizResFirst);
-  const getAllStudentQuizResSecond = useQuery(api.student_quiz_res.getAllStudentQuizResSecond);
-  const getAllStudentQuizResThird = useQuery(api.student_quiz_res.getAllStudentQuizResThird);
-
-
-  // Create a post request to group students based on quiz results
-  console.log(getAllStudentQuizResFirst);
-
-  useEffect(() => {
-    if (getAllStudentQuizResFirst && getAllStudentQuizResSecond && getAllStudentQuizResThird) {
-      fetch("http://localhost:5001/group_students", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify([
-          getAllStudentQuizResFirst,
-          getAllStudentQuizResSecond,
-          getAllStudentQuizResThird
-        ]),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Grouped students:", data);
-        })
-        .catch((error) => {
-          console.error("Error grouping students:", error);
-        });
-    }
-  }, [getAllStudentQuizResFirst, getAllStudentQuizResSecond, getAllStudentQuizResThird]);
-
-
-  console.log(getAllStudentQuizResFirst);
-  fetchCourseData();
-}, [courseName]);
 
 const createHomework = useMutation(api.homeworks.createHomework);
 const createQuiz = useMutation(api.quizzes.createQuiz);
@@ -193,16 +108,17 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
             const hints: string[] = data["hints"];
             const options: string[][] = data["options"];
             createHomework({
-              subject: "EECS",
-              courseNumber: "16",
+              id: "hwid",
+              courseId: "test id",
               name: "Homework 1",
               questions: questions,
               hints: hints,
             })
             createQuiz({
-              subject: "EECS",
-              courseNumber: "16",
+              id: "quizid",
+              courseId: "test id",
               name: "Quiz 1",
+              description: "Quiz 1",
               questions: questions,
               answerOptions: options,
               answers: answers,
@@ -235,39 +151,10 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuizButtonVisible(true);
   };
 
-
-
   return (
     <div className="course-page">
       <Sidebar />
       <main className="course-main-content">
-        <h1 className="page-title">{courseName}</h1>
-
-        {/* <section className="add-course card"> */}
-
-
-        {/* <section className="add-course card">
-
-          <h2>Add Course</h2>
-          <input
-            type="text"
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Course Number"
-            value={courseNumber}
-            onChange={(e) => setCourseNumber(e.target.value)}
-          />
-          <button onClick={handleAddCourse}>Add Course</button>
-
-        </section>
-
-
-        </section> */}
-
         <h1 className="page-title">{courseData.name}</h1>
 
         <section className="course-info card">
