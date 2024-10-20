@@ -132,7 +132,7 @@ const CoursePage: React.FC = () => {
         <h1 className="page-title">{courseData.name}</h1>
 
 
-        <section className="add-course card">
+        {/* <section className="add-course card"> */}
 
         
         {/* <section className="add-course card">
