@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import '../styles/CourseOverview.css';
 
 interface Course {
@@ -9,10 +11,8 @@ interface Course {
 }
 
 const CourseCard: React.FC<Course> = ({ name, instructor, progress, image }) => {
-
-  
   return (
-    <div className="course-card">
+    <Link to={`/course/${name.toLowerCase().replace(/\s+/g, '-')}`} className="course-card">
       <div className="course-image" style={{ backgroundImage: `url(${image})` }}></div>
       <div className="course-content">
         <h3 className="course-title">{name}</h3>
@@ -31,7 +31,7 @@ const CourseCard: React.FC<Course> = ({ name, instructor, progress, image }) => 
           <span>{progress}/100</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
