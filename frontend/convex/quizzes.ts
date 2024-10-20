@@ -24,9 +24,9 @@ export const createQuiz = mutation({
     }
 });
 
-export const getQuizzes = query({
+export const getMostRecentQuiz = query({
     args: {},
     handler: async (ctx) => {
-        return await ctx.db.query("quizzes").collect();
+        return await ctx.db.query("quizzes").order("desc").first();
     }
 });

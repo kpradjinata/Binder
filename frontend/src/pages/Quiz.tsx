@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import QuizQuestion from '../components/QuizQuestion';
 import '../styles/Quiz.css';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { useEffect, useRef } from 'react';
+
 
 interface QuizData {
   questions: string[];
-  options: string[][];
+  answerOptions: string[][];
   answers: string[];
 }
+
+const letterToIndexMap = new Map<string, number>([
+  ['A', 0],
+  ['B', 1],
+  ['C', 2],
+  ['D', 3]
+]);
 
 const quizData: QuizData = {
   questions: [
@@ -21,7 +32,7 @@ const quizData: QuizData = {
     "What is the sum of angles in a triangle?",
     "What is the area of a circle with radius 3?"
   ],
-  options: [
+  answerOptions: [
     ["6", "7", "8", "9"],
     ["2", "3", "4", "5"],
     ["x = 1", "x = 2", "x = 3", "x = 4"],
@@ -37,8 +48,28 @@ const quizData: QuizData = {
 };
 
 const Quiz: React.FC = () => {
-  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(quizData.questions.length).fill(''));
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [quizData, setQuizData] = useState<QuizData | null>(null);
+  const [userAnswers, setUserAnswers] = useState<string[]>(new Array(quizData?.questions.length || 0).fill(''));
+
+  const quizDataRef = useRef<QuizData | null>(null);
+
+  const fetchedQuiz: QuizData | undefined | null = useQuery(api.quizzes.getMostRecentQuiz);
+
+  useEffect(() => {
+    if (fetchedQuiz && !quizDataRef.current) {
+      quizDataRef.current = fetchedQuiz;
+      setQuizData(fetchedQuiz);
+      console.log("Quiz data set:", fetchedQuiz);
+      // Initialize userAnswers here if needed
+      setUserAnswers(new Array(fetchedQuiz.questions?.length || 0).fill(''));
+    }
+  }, [fetchedQuiz]);
+
+
+  // const quizzes = useQuery(api.quizzes.getMostRecentQuiz);
+  // console.log(quizzes?.questions);
+
 
   const handleAnswerSelect = (questionIndex: number, answer: string) => {
     const newAnswers = [...userAnswers];
@@ -64,26 +95,28 @@ const Quiz: React.FC = () => {
   const calculateScore = () => {
     let correctAnswers = 0;
     userAnswers.forEach((answer, index) => {
-      if (answer === quizData.answers[index]) {
+      console.log(quizData?.answers[index], answer);
+
+      if (answer === quizData?.answerOptions[index][letterToIndexMap.get(quizData?.answers[index]) ?? 0]) {
         correctAnswers++;
       }
     });
-    return `${correctAnswers}/${quizData.questions.length}`;
+    return `${correctAnswers}/${quizData?.questions.length}`;
   };
 
   return (
     <div className="quiz-container">
       <h2>Quiz (Number)</h2>
-      {quizData.questions.map((question, index) => (
+      {quizData?.questions.map((question, index) => (
         <QuizQuestion
           key={index}
           questionNumber={index + 1}
           question={question}
-          options={quizData.options[index]}
+          answerOptions={quizData?.answerOptions[index]}
           onAnswerSelect={(answer) => handleAnswerSelect(index, answer)}
           selectedAnswer={userAnswers[index]}
           isSubmitted={quizSubmitted}
-          correctAnswer={quizData.answers[index]}
+          correctAnswer={quizData?.answerOptions[index][letterToIndexMap.get(quizData?.answers[index]) ?? 0]}
         />
       ))}
       {!quizSubmitted && (

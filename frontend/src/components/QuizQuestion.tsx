@@ -4,17 +4,18 @@ import '../styles/QuizQuestion.css';
 interface QuizQuestionProps {
   questionNumber: number;
   question: string;
-  options: string[];
+  answerOptions: string[];
   onAnswerSelect: (answer: string) => void;
   selectedAnswer: string;
   isSubmitted: boolean;
-  correctAnswer: string;
+  correctAnswer: string | undefined;
 }
+
 
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
   questionNumber,
   question,
-  options,
+  answerOptions,
   onAnswerSelect,
   selectedAnswer,
   isSubmitted,
@@ -24,7 +25,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
     <div className="question-card">
       <h3 className="question-title">{questionNumber}. {question}</h3>
       <div className="answer-options">
-        {options.map((option, index) => (
+        {answerOptions.map((option, index) => (
           <div key={index} className="answer-option">
             <label className="label">
               <input
