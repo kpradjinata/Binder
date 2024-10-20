@@ -21,14 +21,18 @@ export default defineSchema({
         subject: v.string(),
         courseNumber: v.string(),
         syllabus: v.string(),
-    }).index('by_courseId', ['id']),
+    }).index('by_college_subject_number', ['collegeId', 'subject', 'courseNumber']),
     studentCourses: defineTable({
         studentId: v.string(),
         courseId: v.string(),
-        enrollmentDate: v.number(), // Unix timestamp
         skills: v.array(v.string()),
     }).index('by_studentId', ['studentId'])
         .index('by_courseId', ['courseId']),
+    studentSkills: defineTable({
+        studentId: v.string(),
+        courseId: v.string(),
+        skill: v.array(v.string()),
+    }).index('by_student_course', ['studentId', 'courseId']),
     quizzes: defineTable({
         id: v.string(),
         name: v.string(),
@@ -49,12 +53,12 @@ export default defineSchema({
         courseId: v.string(),
         name: v.string(),
         questions: v.string(),
-    }).index('by_homeworkId', ['id']),
+    }).index('by_course_name', ['courseId', 'name']),
     discussions: defineTable({
         id: v.string(),
         courseId: v.string(),
         name: v.string(),
-    }).index('by_discussionId', ['id']),
+    }).index('by_courseId', ['courseId']),
     discussionPosts: defineTable({
         discussionId: v.string(),
         studentId: v.string(),
