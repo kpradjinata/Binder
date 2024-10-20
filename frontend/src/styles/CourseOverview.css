@@ -25,6 +25,13 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease-in-out;
+}
+
+.course-card:hover {
+  transform: scale(1.05);
 }
 
 .course-image {

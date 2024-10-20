@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Sidebar from "../components/Sidebar";
-import '../styles/Course.css';
+import '../styles/CoursePage.css';
+import { useParams } from 'react-router-dom';
 
-const CoursePage = () => {
+const CoursePage: React.FC = () => {
+  const { courseName } = useParams<{ courseName: string }>();
   const [subject, setSubject] = useState('');
   const [courseNumber, setCourseNumber] = useState('');
   const [activeTab, setActiveTab] = useState('upcoming');
@@ -26,7 +28,7 @@ const CoursePage = () => {
     <div className="course-page">
       <Sidebar />
       <main className="course-main-content">
-        <h1 className="page-title">Course Page</h1>
+        <h1 className="page-title">{courseName}</h1>
         
         <section className="add-course card">
           <h2>Add Course</h2>
