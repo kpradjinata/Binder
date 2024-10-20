@@ -9,9 +9,10 @@ interface Course {
   image: string;
 }
 
-const CourseCard: React.FC<Course> = ({ name, instructor, progress, image }) => {
+
+const CourseCard: React.FC<Course & { loaded: boolean }> = ({ name, instructor, progress, image, loaded }) => {
   return (
-    <Link to={`/course/${name.toLowerCase().replace(/\s+/g, '-')}`} className="course-card">
+    <Link to={`/course/${name.toLowerCase().replace(/\s+/g, '-')}`} className={`course-card ${loaded ? 'loaded' : ''}`}>
       <div className="course-image" style={{ backgroundImage: `url(${image})` }}></div>
       <div className="course-content">
         <h3 className="course-title">{name}</h3>
@@ -49,6 +50,7 @@ const CourseOverview: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [newCourseName, setNewCourseName] = useState('');
   const [newInstructorName, setNewInstructorName] = useState('');
+  const [cardsLoaded, setCardsLoaded] = useState(false);
 
   const coursesPerPage = 4;
   const totalPages = Math.ceil(courses.length / coursesPerPage);
@@ -82,6 +84,15 @@ const CourseOverview: React.FC = () => {
     }
   };
 
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCardsLoaded(true);
+    }, 100);
+  
+    return () => clearTimeout(timer);
+  }, []);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setSlideDirection(null);
@@ -99,8 +110,11 @@ const CourseOverview: React.FC = () => {
     <div className="course-overview-container">
       <h2 className="overview-title">Daily Overview</h2>
       <div className={`course-grid ${slideDirection ? `slide-${slideDirection}` : ''}`}>
-        {displayedCourses.map((course, index) => (
-          <CourseCard key={`${currentPage}-${index}`} {...course} />
+      {displayedCourses.map((course, index) => (
+    <CourseCard 
+      key={`${currentPage}-${index}`} 
+      {...course} 
+      loaded={cardsLoaded} />
         ))}
       </div>
       <div className="navigation-container">
