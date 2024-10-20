@@ -148,7 +148,7 @@ const CoursePage: React.FC = () => {
         <section className="course-info card">
           <h2>{courseData.name}</h2>
           {courseData.image && (
-            <img src={courseData.image} alt={courseData.name} className="course-image" />
+            <img src={courseData.image} alt={courseData.name} className="course-page-image" />
           )}
           <p className="instructor">Instructor: {courseData.instructor}</p>
           <p className="description">{courseData.description}</p>
