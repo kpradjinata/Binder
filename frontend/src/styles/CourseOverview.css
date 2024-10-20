@@ -27,6 +27,12 @@
   text-decoration: none;
   color: inherit;
   transition: transform 0.2s ease-in-out;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.course-card.loaded {
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
 .course-card:hover {
@@ -119,28 +125,124 @@
   background-color: #45a049;
 }
 
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+.add-course-button-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  /* Vertically align buttons */
+  justify-content: flex-start;
+  /* Aligns buttons from the left */
+  gap: 10px;
+  /* Space between the buttons */
 }
 
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
+.quiz-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
   width: 300px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-family: 'Arial', sans-serif;
 }
 
-.popup-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+.quiz-popup p {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 20px;
 }
+
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.course-card {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease-in-out;
+  height: calc(50vh ); 
+  display: flex;
+  flex-direction: column;
+}
+
+.course-image {
+  height: 40%;
+  background-size: cover;
+  background-position: center;
+}
+
+.course-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.quiz-popup button {
+  margin: 0 10px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quiz-popup button:first-child {
+  background-color: green;
+  color: white;
+}
+
+.quiz-popup button:first-child:hover {
+  background-color: #45a049;
+}
+
+.quiz-popup button:last-child {
+  background-color: red;
+  color: #333;
+}
+
+.quiz-popup button:last-child:hover {
+  background-color: #e24a4a;
+}
+
+.take-quiz-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.take-quiz-btn:hover {
+  background-color: #45a049;
+}
+
+
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

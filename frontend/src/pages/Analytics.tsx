@@ -52,21 +52,6 @@ const Analytics: React.FC = () => {
       <Sidebar />
       <div className="analytics-wrapper" style={{ marginLeft: '250px', flex: 1, padding: '20px' }}>
         <h1 style={{ marginBottom: '20px', fontSize: '2rem', fontWeight: 700 }}>Discussion Analytics</h1>
-
-        <ToggleSection title="Thread and Comment Activity (Last 7 Days)" expanded={threadActivityExpanded} onToggle={() => setThreadActivityExpanded(!threadActivityExpanded)}>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={threadActivityData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="threads" fill="#4ECDC4" />
-              <Bar dataKey="comments" fill="#FF6B6B" />
-            </BarChart>
-          </ResponsiveContainer>
-        </ToggleSection>
-
         <ToggleSection title="Top 5 Threads by Likes" expanded={topThreadsExpanded} onToggle={() => setTopThreadsExpanded(!topThreadsExpanded)}>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -86,6 +71,20 @@ const Analytics: React.FC = () => {
               </Pie>
               <Tooltip />
             </PieChart>
+          </ResponsiveContainer>
+        </ToggleSection>
+
+        <ToggleSection title="Thread and Comment Activity (Last 7 Days)" expanded={threadActivityExpanded} onToggle={() => setThreadActivityExpanded(!threadActivityExpanded)}>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={threadActivityData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="threads" fill="#4ECDC4" />
+              <Bar dataKey="comments" fill="#FF6B6B" />
+            </BarChart>
           </ResponsiveContainer>
         </ToggleSection>
 

@@ -9,6 +9,7 @@ const GroupSession: React.FC = () => {
         <p className="session-name">Amoeba Growth</p>
         <p className="session-date">June 24th, 6PM</p>
       </div>
+      <button className="join-session-btn">Join Session</button>
     </div>
   );
 };
