@@ -6,7 +6,7 @@ export const createHomework = mutation({
         id: v.string(),
         courseId: v.string(),
         name: v.string(),
-        questions: v.string(),
+        questions: v.array(v.string()),
         hints: v.array(v.string()),
     },
     handler: async (ctx, args) => {
