@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Routes, Route, useParams } from 'react-router-dom';
 import '../styles/Discussion.css';
 import { HeartFilledIcon, PlusIcon } from "@radix-ui/react-icons";
 import Sidebar from '../components/Sidebar';
-
 
 interface Thread {
   id: number;
@@ -22,21 +21,21 @@ interface Comment {
   likes: number;
 }
 
-const ThreadList: React.FC<{ threads: Thread[], onNewThread: () => void }> = ({ threads, onNewThread }) => (
+const ThreadList: React.FC<{ threads: Thread[], onNewThread: () => void, loadedThreads: Set<number> }> = 
+  ({ threads, onNewThread, loadedThreads }) => (
   <div className="thread-navigation">
     <button onClick={onNewThread} className="new-thread-button">
       <PlusIcon /> New Thread
     </button>
     <ul className="thread-list">
       {threads.map((thread) => (
-        <li key={thread.id}>
+        <li key={thread.id} className={loadedThreads.has(thread.id) ? 'loaded' : ''}>
           <Link to={`/discussion/${thread.id}`}>{thread.title}</Link>
         </li>
       ))}
     </ul>
   </div>
 );
-
 
 interface ThreadDetailProps {
   threads: Thread[];
@@ -48,6 +47,7 @@ const ThreadDetail: React.FC<ThreadDetailProps> = ({ threads, comments, createNe
   const { threadId } = useParams<{ threadId: string }>();
   const thread = threads.find(t => t.id === Number(threadId));
   const [newCommentContent, setNewCommentContent] = useState('');
+  const [newCommentId, setNewCommentId] = useState<number | null>(null);
   
   if (!thread) return <div>Thread not found</div>;
 
@@ -55,8 +55,11 @@ const ThreadDetail: React.FC<ThreadDetailProps> = ({ threads, comments, createNe
 
   const handleCreateComment = () => {
     if (newCommentContent.trim()) {
+      const commentId = Date.now();
       createNewComment(thread.id, newCommentContent);
       setNewCommentContent('');
+      setNewCommentId(commentId);
+      setTimeout(() => setNewCommentId(null), 300); // Reset after animation duration
     }
   };
 
@@ -66,7 +69,10 @@ const ThreadDetail: React.FC<ThreadDetailProps> = ({ threads, comments, createNe
       <p>{thread.content}</p>
       <div className="comments">
         {threadComments.map(comment => (
-          <div key={comment.id} className="comment">
+          <div 
+            key={comment.id} 
+            className={`comment ${comment.id === newCommentId ? 'fade-in' : ''}`}
+          >
             <p>{comment.content}</p>
             <span>{comment.author} - {comment.timestamp}</span>
           </div>
@@ -83,7 +89,6 @@ const ThreadDetail: React.FC<ThreadDetailProps> = ({ threads, comments, createNe
     </div>
   );
 };
-
 
 
 const Discussion: React.FC = () => {
@@ -162,9 +167,20 @@ const Discussion: React.FC = () => {
   const [showNewThreadForm, setShowNewThreadForm] = useState(false);
   const [newThreadTitle, setNewThreadTitle] = useState('');
   const [newThreadContent, setNewThreadContent] = useState('');
+  const [loadedThreads, setLoadedThreads] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    threads.forEach((thread, index) => {
+      setTimeout(() => {
+        setLoadedThreads(prev => new Set(prev).add(thread.id));
+      }, index * 100); // Stagger the loading by 100ms per thread
+    });
+  }, [threads]);
+
+
   const createNewComment = (threadId: number, content: string) => {
     const newComment: Comment = {
-      id: Date.now(),
+      id: Date.now(), // Use the current timestamp as the ID
       author: "Anonymous User",
       content: content,
       timestamp: "Just now",
@@ -175,6 +191,8 @@ const Discussion: React.FC = () => {
       [threadId]: [...(prevComments[threadId] || []), newComment]
     }));
   };
+  
+
   const createNewThread = () => {
     if (newThreadTitle && newThreadContent) {
       const newThread: Thread = {
@@ -192,25 +210,20 @@ const Discussion: React.FC = () => {
     }
   };
 
-  return (
-    <div className="discussion-container">
-      <Sidebar />
-      <div className="discussion-content">
-        <div className="thread-list-container">
-          <button onClick={() => setShowNewThreadForm(true)} className="new-thread-button">
-            <PlusIcon /> New Thread
-          </button>
-          <ul className="thread-list">
-            {threads.map((thread) => (
-              <li key={thread.id}>
-                <Link to={`/discussion/${thread.id}`}>{thread.title}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="thread-detail-container">
-          <h1 className="page-title">Discussions</h1>
-          <Routes>
+return (
+  <div className="discussion-container">
+    <Sidebar />
+    <div className="discussion-content">
+      <div className="thread-list-container">
+        <ThreadList 
+          threads={threads} 
+          onNewThread={() => setShowNewThreadForm(true)} 
+          loadedThreads={loadedThreads}
+        />
+      </div>
+      <div className="thread-detail-container">
+        <h1 className="page-title">Discussions</h1>
+        <Routes>
           <Route 
             path="/:threadId" 
             element={
@@ -221,10 +234,10 @@ const Discussion: React.FC = () => {
               />
             } 
           />
-            <Route path="/" element={<div className="select-thread-message">Select a thread or create a new one</div>} />
-          </Routes>
-        </div>
+          <Route path="/" element={<div className="select-thread-message">Select a thread or create a new one</div>} />
+        </Routes>
       </div>
+    </div>
 
       {showNewThreadForm && (
         <div className="modal-overlay" onClick={() => setShowNewThreadForm(false)}>

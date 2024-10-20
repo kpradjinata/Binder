@@ -374,3 +374,15 @@ h2 {
   transform: scale(1.05);
   /* Slightly scale up on hover */
 }
+
+.thread-list li {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.thread-list li.loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
