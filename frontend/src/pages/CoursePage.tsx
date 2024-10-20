@@ -7,16 +7,13 @@ import PDFToText from 'react-pdftotext';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
-
 interface CourseData {
   name: string;
   instructor: string;
   description: string;
   progress: number;
+  image?: string;
 }
-
-
-
 
 const CoursePage: React.FC = () => {
   const { courseName } = useParams<{ courseName: string }>();
@@ -24,6 +21,7 @@ const CoursePage: React.FC = () => {
   const [pdfText, setPdfText] = useState('');
   const [courseData, setCourseData] = useState<CourseData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [englishImage, setEnglishImage] = useState<string>("/english.jpg");
 
   const upcomingQuizzes = [
     { id: 1, name: 'Midterm Exam', date: 'Oct 15, 2024' },
@@ -38,13 +36,13 @@ const CoursePage: React.FC = () => {
   useEffect(() => {
     const fetchCourseData = async () => {
       const urlFriendlyName = courseName?.toLowerCase().replace(/-/g, ' ');
-      // const data = mockCourseData[urlFriendlyName || ''] || null;
       const mockCourseData: Record<string, CourseData> = {
         'english': {
           name: 'English',
           instructor: 'Alphonso Thompson',
           description: 'Comprehensive English language and literature course.',
-          progress: 77
+          progress: 77,
+          image: englishImage
         },
         'math': {
           name: 'Math',
@@ -58,16 +56,14 @@ const CoursePage: React.FC = () => {
           description: 'In-depth study of world history.',
           progress: 0
         },
-        // Add more courses as needed
       };
 
-      // Get the course data based on the URL parameter
       const data = mockCourseData[courseName || ''] || null;
       setCourseData(data);
     };
 
     fetchCourseData();
-  }, [courseName]);
+  }, [courseName, englishImage]);
 
   const createHomework = useMutation(api.homeworks.createHomework);
   const createQuiz = useMutation(api.quizzes.createQuiz);
@@ -131,39 +127,14 @@ const CoursePage: React.FC = () => {
       <main className="course-main-content">
         <h1 className="page-title">{courseData.name}</h1>
 
-
-        {/* <section className="add-course card"> */}
-
-        
-        {/* <section className="add-course card">
-
-          <h2>Add Course</h2>
-          <input
-            type="text"
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Course Number"
-            value={courseNumber}
-            onChange={(e) => setCourseNumber(e.target.value)}
-          />
-          <button onClick={handleAddCourse}>Add Course</button>
-
-        </section>
-
-
-        </section> */}
-        
-
         <section className="course-info card">
           <h2>{courseData.name}</h2>
+          {courseData.image && (
+            <img src={courseData.image} alt={courseData.name} className="course-image" />
+          )}
           <p className="instructor">Instructor: {courseData.instructor}</p>
           <p className="description">{courseData.description}</p>
           <div className="progress-bar">
-
             <div className="progress" style={{width: `${courseData.progress}%`}}></div>
           </div>
           <p className="progress-text">Progress: {courseData.progress}%</p>
@@ -171,7 +142,6 @@ const CoursePage: React.FC = () => {
             type="file" 
             accept=".pdf" 
             onChange={handleFileUpload} 
-
             ref={fileInputRef}
             style={{ display: 'none' }}
           />

@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
   ]);
   const [skills, setSkills] = useState<string[]>(['JavaScript', 'React', 'Node.js', 'Python']);
   const [isEditing, setIsEditing] = useState(false);
-  const [image, setImage] = useState<string>("/Nam-Joo-Hyuk.jpg");
+  const [image, setImage] = useState<string>("/nam.jpg");
 
   useEffect(() => {
     const img = new Image();
