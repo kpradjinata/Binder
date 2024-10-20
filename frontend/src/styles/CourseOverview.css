@@ -1,7 +1,7 @@
 .course-overview-container {
   position: relative;
   padding: 20px;
-  overflow: hidden; /* Add this to hide overflowing content during animation */
+  overflow: hidden;
 }
 
 .course-grid {
@@ -19,12 +19,11 @@
   transform: translateX(100%);
 }
 
-
 .course-card {
   background-color: white;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-decoration: none;
   color: inherit;
   transition: transform 0.2s ease-in-out;
@@ -76,13 +75,11 @@
   color: #666;
 }
 
-
-.navigation-buttons {
+.navigation-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
-  position: relative;
-  z-index: 1; /* Ensure buttons are above the sliding content */
 }
 
 .nav-button {
@@ -106,4 +103,44 @@
 .nav-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.add-course-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 20px;
+}
+
+.add-course-button:hover {
+  background-color: #45a049;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
