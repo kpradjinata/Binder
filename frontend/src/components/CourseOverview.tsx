@@ -109,7 +109,7 @@ const CourseOverview: React.FC = () => {
     currentPage * coursesPerPage,
     (currentPage + 1) * coursesPerPage
   );
-
+  
   return (
     <div className="course-overview-container">
       <h2 className="overview-title">Daily Overview</h2>
