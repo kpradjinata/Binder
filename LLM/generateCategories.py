@@ -1,29 +1,16 @@
 import os
 import json
 from flask import Flask, request, jsonify
-from werkzeug.utils import secure_filename
 from openai import OpenAI
-from PyPDF2 import PdfReader
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max-limit
 
 client = OpenAI(api_key=os.getenv('API_KEY'))
 
-def extract_text_from_pdf(pdf_path):
-    reader = PdfReader(pdf_path)
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text
-
-def analyze_pdf(pdf_path, prompt):
-    pdf_text = extract_text_from_pdf(pdf_path)
-    
+def analyze_text(text, prompt):
     messages = [
-        {"role": "system", "content": "You are a helpful assistant that analyzes PDF content and generates hints for homework questions."},
-        {"role": "user", "content": f"{prompt}\n\nPDF Content:\n{pdf_text}"}
+        {"role": "system", "content": "You are a helpful assistant that analyzes text content and generates hints for homework questions."},
+        {"role": "user", "content": f"{prompt}\n\nText Content:\n{text}"}
     ]
     
     response = client.chat.completions.create(
@@ -102,54 +89,45 @@ def format_quiz(quiz_data):
 
     return questions, options, answers
 
-@app.route('/analyze_pdf', methods=['POST'])
-def analyze_pdf_route():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-    if file and file.filename.lower().endswith('.pdf'):
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
+@app.route('/analyze_text', methods=['POST'])
+def analyze_text_route():
+    data = request.json
+    if not data or 'text' not in data:
+        return jsonify({'error': 'No text provided'}), 400
 
-        # Analyze for skills
-        skills_prompt = """
-        Analyze this syllabus and identify exactly 3 distinct hard skills someone would need to succeed in this course.
-        Return your response as a JSON object with the following structure:
-        {
-            "skills": ["Skill 1", "Skill 2", "Skill 3"]
-        }
-        """
-        skills_result = analyze_pdf(file_path, skills_prompt)
+    text = data['text']
 
-        # Generate quiz
-        quiz_data = generate_quiz(skills_result['skills'])
-        questions, options, answers = format_quiz(quiz_data)
+    # Analyze for skills
+    skills_prompt = """
+    Analyze this text and identify exactly 3 distinct hard skills someone would need to succeed in this course.
+    Return your response as a JSON object with the following structure:
+    {
+        "skills": ["Skill 1", "Skill 2", "Skill 3"]
+    }
+    """
+    skills_result = analyze_text(text, skills_prompt)
 
-        # Generate hints
-        hints_prompt = """
-        Analyze this homework PDF and generate a hint for each question. Return the hints as an array of strings.
-        Format the response as a JSON object with a single key "hints" whose value is the array of hints.
-        Example format:
-        {
-            "hints": ["Hint for question 1", "Hint for question 2", "Hint for question 3"]
-        }
-        """
-        hints_result = analyze_pdf(file_path, hints_prompt)
+    # Generate quiz
+    quiz_data = generate_quiz(skills_result['skills'])
+    questions, options, answers = format_quiz(quiz_data)
 
-        os.remove(file_path)  # Remove the uploaded file after processing
+    # Generate hints
+    hints_prompt = """
+    Analyze this text and generate a hint for each question. Return the hints as an array of strings.
+    Format the response as a JSON object with a single key "hints" whose value is the array of hints.
+    Example format:
+    {
+        "hints": ["Hint for question 1", "Hint for question 2", "Hint for question 3"]
+    }
+    """
+    hints_result = analyze_text(text, hints_prompt)
 
-        return jsonify({
-            'questions': questions,
-            'options': options,
-            'answers': answers,
-            'hints': hints_result['hints']
-        })
-    else:
-        return jsonify({'error': 'Invalid file type'}), 400
+    return jsonify({
+        'questions': questions,
+        'options': options,
+        'answers': answers,
+        'hints': hints_result['hints']
+    })
 
 if __name__ == '__main__':
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     app.run(debug=True, port=8080)
